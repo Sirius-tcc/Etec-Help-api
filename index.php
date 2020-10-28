@@ -4,6 +4,7 @@
     header('Content-Type: application/json; charset=utf-8');
 
     require_once 'classes/Helper.php';
+    require_once 'classes/Student.php';
 
     class Rest {
 
@@ -31,13 +32,13 @@
                         $return = call_user_func_array(array(new $class, $method), $params);
         
                         return json_encode(array(
-                            'status' => 'sucess',
+                            'sucess' => true,
                             'data' => $return
                         ));
         
                     }else{
                         return json_encode(array(
-                            'status' => 'error',
+                            'sucess' => false,
                             'data' => 'Método inexistente!'
                         ));
                     }
@@ -45,13 +46,13 @@
         
                 }else{
                     return json_encode(array(
-                        'status' => 'error',
+                        'sucess' => false,
                         'data' => 'Classe inexistente!'
                     ));
                 }
             }catch(Exception $e){
                 return json_encode(array(
-                    'status' => 'error',
+                    'sucess' => false,
                     'data' => $e->getMessage()
                 ));
             }
@@ -65,10 +66,9 @@
 
     if (!empty($_REQUEST)) {
         echo Rest::open($_REQUEST);
-        
     }else {
         echo json_encode(array(
-            'status' => 'error',
+            'sucess' => false,
             'data' => 'Nenhuma resposta'
         ));
     }

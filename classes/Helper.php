@@ -23,6 +23,10 @@
 
             $result = array();
             while($row = $sql->fetch(PDO::FETCH_ASSOC)){
+                $row['code'] = (int) $row['code'];
+                $row['classification'] = (int) $row['classification'];
+                $row['helps'] = (int) $row['helps'];
+                
                 $result[] = $row;
             }
 
@@ -49,7 +53,7 @@
                 $classification = $array_data['classification'];
                 $email = $array_data['email'];  
                 $helps = $array_data['helps'];  
-                $password =  sha1($name . $surname . $array_data['password']);
+                $password = sha1($email . $array_data['password']);
     
                 try {
                     $sql = "INSERT INTO tbHelper(nome_helper , sobrenome_helper , biografia_helper, classificacao_helper, email_helper, ajudas_dadas_helper, senha_helper) VALUES ('$name', '$surname', '$bio', $classification, '$email', $helps, '$password')";
@@ -63,7 +67,7 @@
                 }
 
             }else{
-                throw new Exception('empty json');
+                throw new Exception('no json found');
             }
         }
 
@@ -76,14 +80,14 @@
                 $array_data = array();
 
                 $array_data = json_decode($json, true);
-    
+
                 $name = $array_data['name'];
                 $surname = $array_data['surname'];
                 $bio = $array_data['bio'];
                 $classification = $array_data['classification'];
                 $email = $array_data['email'];  
                 $helps = $array_data['helps'];  
-                $password =  sha1($name . $surname . $array_data['password']);
+                $password =  sha1($email . $array_data['password']);
     
                 try{
 

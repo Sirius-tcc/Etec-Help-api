@@ -5,9 +5,10 @@
 
     require_once 'classes/Helper.php';
     require_once 'classes/Student.php';
+    require_once 'classes/Auth.php';
+    require_once 'classes/Video.php';
 
     class Rest {
-
         public function open($request){
             $url = explode('/',$request['url']);
 

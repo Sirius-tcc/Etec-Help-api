@@ -1,25 +1,26 @@
 <?php
     require_once('Connection.php');
     include('Custom/UploadImage.php');
-
+    
     class Student {
         private $con;
         private $IMAGE_PATH_HTTP = 'http://localhost/Coisas/backend/uploads/images/student/';
         private $IMAGE_PATH = 'uploads/images/student/';
 
 
-        function __construct() {
+        function __construct() 
+        {
             $this->con = Connection::getConnection();
         }
 
-        public function list(){
+        public function list()
+        {
             $sql = "SELECT * FROM vwEstudantes";
 
             $sql = $this->con->prepare($sql);
 
             $sql->execute();
 
-            $exists = "EXITS";
 
             $result = array();
             while($row = $sql->fetch(PDO::FETCH_ASSOC)){
@@ -36,7 +37,8 @@
         }
 
 
-        public function show($id){
+        public function show($id)
+        {
             $sql = "SELECT * FROM vwEstudantes WHERE code = $id";
 
             $sql = $this->con->prepare($sql);
@@ -59,43 +61,50 @@
         }
 
         
-        public function create() {
+        public function create() 
+        {
             $json = file_get_contents("php://input");
 
             if($json != ''){
                 $array_data = array();
                 $array_data = json_decode($json, true);
-    
-                $name = $array_data['name'];
-                $surname = $array_data['surname'];
-                $email = $array_data['email'];
-                $password = sha1($array_data['password']);
 
-                try{
-                    $sql = "CALL sp_create_estudante ('$name', '$surname', '$email', '$password')";
-                    $sql = $this->con->prepare($sql);
+                if ($array_data != null){
 
-                    $sql->execute();
+                    $name = $array_data['name'];
+                    $surname = $array_data['surname'];
+                    $email = $array_data['email'];
+                    $password = sha1($array_data['password']);
 
-                    
-                    return 'Cadastro realizado com sucesso';
-    
-                }catch(Exception $e){
+                    try{
+                        $sql = "CALL sp_create_estudante ('$name', '$surname', '$email', '$password')";
+                        $sql = $this->con->prepare($sql);
 
-                    if($e->getCode() == "42S02"){
-                        throw new Exception('E-mail já cadastrado!');
+                        $sql->execute();
+
+                        return 'Cadastro realizado com sucesso';
+        
+                    }catch(Exception $e){
+                        if($e->getCode() == "42S02"){
+                            throw new Exception('E-mail já cadastrado!');
+                        }
+                        throw new Exception("Erro ao cadastrar " . $e->getMessage());
                     }
-                    throw new Exception("Erro ao cadastrar " . $e->getMessage());
+
+                    }else{
+                        throw new Exception('No json found');
+                    }
+
+                }else{
+                    throw new Exception('Erro ao decodificar o arquivo json. Verifique se ele foi passado corretamente.');
                 }
                 
-            }else{
-                throw new Exception('No json found');
-            }
             
         }
        
 
-        public function upload_profile($id){
+        public function upload_profile($id)
+        {
             $imageUploaded = $_FILES['student_photo'];
 
             $uploadImage = new UploadImage( 
@@ -109,7 +118,8 @@
         }
 
 
-        public function update($id){
+        public function update($id)
+        {
             $json = file_get_contents("php://input");
 
             if(trim($json) != ''){
@@ -129,7 +139,8 @@
                         return 'Atualização realizada com sucesso';
         
                     } catch(Exception $e) {
-                        throw new Exception('Erro ao atualizar os dados do banco. Erro: ' . $e->getMessage());
+                        if($e->getCode() == "42S02"){ throw new Exception("Id do Estudante não existe."); }
+                        throw new Exception( 'Erro ao atualizar os dados do banco. Erro: ' . $e->getMessage() );
                     }
 
                 }else{
@@ -143,8 +154,8 @@
         }
 
 
-
-        public function delete($id){
+        public function delete($id)
+        {
             try{
                 $profile_photo = $this->IMAGE_PATH . $id . "." . "png";
                 
@@ -158,11 +169,60 @@
                 return 'Exclusão realizada com sucesso';
 
             }catch(Exception $e){
+                
                 if($e->getCode() == "42S02"){ throw new Exception("Usuário não existe."); }
 
                 throw new Exception('Erro ao deletar usuário. Erro: ' . $e->getMessage());
             }
         }
 
-        
+        public function login() 
+        {
+            $json = file_get_contents("php://input");
+
+            if(trim($json) != '')
+            {
+                $array_data = array();
+                $array_data = json_decode($json, true);
+
+                if ($array_data != null)
+
+                {
+                    $email = $array_data['email'];
+                    $password = sha1($array_data['password']);
+                    try{
+                        $sql = "SELECT cod_estudante AS code, nome_estudante AS name, email_estudante AS email FROM 
+                        tbEstudante WHERE senha_estudante = '$password' AND email_estudante = '$email'";
+
+                        $sql = $this->con->prepare($sql);
+
+                        $sql->execute();
+                        
+                        $user = $sql->fetch(PDO::FETCH_ASSOC);
+
+                        if(!$user) { throw new Exception("Email ou senha incorretos"); }
+
+                        $user['code'] = (int) $user['code'];
+                        
+                        $id = $user['code'];
+                        $name = $user['name'];
+                        $email = $user['email'];
+                        
+                        
+                        $auth = new Auth();
+
+                        $auth->createToken( $id, $name, $email );
+
+                        return $auth->createToken( $id, $name, $email );
+
+                    }catch(Exception $e){ 
+                        throw new Exception( $e->getMessage());
+                    }
+
+                }
+
+            }
+        }
+
+
     }

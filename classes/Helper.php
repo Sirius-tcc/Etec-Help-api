@@ -2,31 +2,32 @@
 
     require_once 'Connection.php';
 
-    // helper salt password  = sha1( name + surname + password )
     
     class Helper {
         private $con;
+        private $IMAGE_PATH_HTTP = 'http://localhost/Coisas/backend/uploads/images/helper/';
+        private $IMAGE_PATH = 'uploads/images/helper/';
 
-        function __construct() {
+
+        function __construct()
+        {
             $this->con = Connection::getConnection();
         }
 
 
-
-        public function list(){
-            $sql = "SELECT cod_helper as 'code', foto_helper as 'photo', nome_helper as 'name', sobrenome_helper as 'surname', biografia_helper as 'bio', classificacao_helper as 'classification', email_helper as 'email', ajudas_dadas_helper as 'helps'
-            from tbHelper";
+        public function list()
+        {
+            $sql = "SELECT * FROM vwHelper";
             
             $sql = $this->con->prepare($sql);
 
             $sql->execute();
 
             $result = array();
+
             while($row = $sql->fetch(PDO::FETCH_ASSOC)){
                 $row['code'] = (int) $row['code'];
-                $row['classification'] = (int) $row['classification'];
-                $row['helps'] = (int) $row['helps'];
-                
+                $row['photo'] = $row['photo'] === null ? $row['photo'] : $this->IMAGE_PATH_HTTP.$row['photo'];
                 $result[] = $row;
             }
 
@@ -38,7 +39,42 @@
         }
 
 
-        public function create(){
+        public function show($id)
+        {
+            $sql = "SELECT * FROM vwHelper WHERE code = $id";
+            $sql = $this->con->prepare($sql);
+
+            $sql->execute();
+
+            $result = array();
+
+            while($row = $sql->fetch(PDO::FETCH_ASSOC)){
+                $row['code'] = (int) $row['code'];
+                $row['photo'] = $row['photo'] === null ? $row['photo'] : $this->IMAGE_PATH_HTTP.$row['photo'];
+                $result[] = $row;
+            }
+
+            if(!$result){
+                throw new Exception("Nenhum helper com esse id");
+            }
+
+            return $result;
+        }
+
+        public function upload_profile($id)
+        {
+            $imageUploaded = $_FILES['helper_photo'];
+            $uploadImage = new UploadImage( 
+                $id, 
+                $imageUploaded, 
+                $this->IMAGE_PATH 
+            );
+            return $uploadImage->upload('sp_save_photo_helper_name');
+
+        }
+
+        public function create()
+        {
             $json = file_get_contents("php://input");
 
             if($json != ''){
@@ -50,29 +86,32 @@
                 $name = $array_data['name'];
                 $surname = $array_data['surname'];
                 $bio = $array_data['bio'];
-                $classification = $array_data['classification'];
                 $email = $array_data['email'];  
-                $helps = $array_data['helps'];  
-                $password = sha1($email . $array_data['password']);
+                $password = sha1( $array_data['password'] );
     
                 try {
-                    $sql = "INSERT INTO tbHelper(nome_helper , sobrenome_helper , biografia_helper, classificacao_helper, email_helper, ajudas_dadas_helper, senha_helper) VALUES ('$name', '$surname', '$bio', $classification, '$email', $helps, '$password')";
+                    $sql = "CALL sp_create_helper('$name', '$surname', '$bio', '$email', '$password')";
 
                     $this->con->exec($sql);
     
                     return 'Cadastro realizado com sucesso';
-                    
+
                 }catch(Exception $e){
-                    throw new Exception('Erro ao cadastrar. Erro: ' . $e->getMessage());
+                    if($e->getCode() == "42S02"){
+                        throw new Exception('E-mail já cadastrado!');
+                    }
+
+                    throw new Exception("Erro ao cadastrar " . $e->getMessage());
                 }
 
             }else{
-                throw new Exception('no json found');
+                throw new Exception('No json found');
             }
         }
 
 
-        public function update($id){
+        public function update($id)
+        {
             $json = file_get_contents("php://input");
 
 
@@ -81,34 +120,30 @@
 
                 $array_data = json_decode($json, true);
 
-                $name = $array_data['name'];
-                $surname = $array_data['surname'];
-                $bio = $array_data['bio'];
-                $classification = $array_data['classification'];
-                $email = $array_data['email'];  
-                $helps = $array_data['helps'];  
-                $password =  sha1($email . $array_data['password']);
-    
-                try{
+                if($array_data != null) {
 
-                    $sql = "UPDATE tbHelper 
-                    SET nome_helper='$name',
-                    sobrenome_helper = '$surname',
-                    biografia_helper = '$bio',
-                    classificacao_helper = $classification,
-                    email_helper = '$email',
-                    ajudas_dadas_helper = $helps,
-                    senha_helper = '$password'
-                    WHERE cod_helper = $id";
-    
-                    $this->con->exec($sql);
-    
-                    return 'Atualização realizada com sucesso';
-    
-                } catch(Exception $e) {
-                    throw new Exception('Erro ao atualizar os dados do banco. Erro: ' . $e->getMessage());
+                    $name = $array_data['name'];
+                    $surname = $array_data['surname'];
+                    $bio = $array_data['bio'];
+                    $email = $array_data['email'];  
+                    
+                    try{
+                        $sql = "CALL sp_update_helper($id, '$name', '$surname', '$bio', '$email')";
+        
+                        $this->con->exec($sql);
+        
+                        return 'Atualização realizada com sucesso';
+        
+                    } catch(Exception $e) {
+
+                        if($e->getCode() == "42S02"){ throw new Exception("Id do Helper não existe."); }
+
+                        throw new Exception('Erro ao atualizar os dados do banco. Erro: ' . $e->getMessage());
+                    }
+                }else{
+                    throw new Exception('Erro ao decodificar o arquivo json. Verifique se ele foi passado corretamente.');
+
                 }
-                
             }else{
                 throw new Exception('empty json');
             }
@@ -116,19 +151,73 @@
         }
 
 
-        public function delete($id){
+        public function delete($id)
+        {
             try{
-                $sql = "DELETE FROM tbHelper WHERE cod_helper = $id";
+                $profile_photo = $this->IMAGE_PATH . $id . "." . "png";
+                
+                if (file_exists($profile_photo)) {
+                    unlink($profile_photo);
+                }
+
+                $sql = "CALL sp_delete_helper($id)";
+
                 $this->con->exec($sql);
 
                 return 'Exclusão realizada com sucesso';
 
             }catch(Exception $e){
+                if($e->getCode() == "42S02"){ throw new Exception("Id do Helper não existe."); }
+
                 throw new Exception('Erro ao deletar usuário. Erro: ' . $e->getMessage());
             }
         }
     
+        public function login() 
+        {
+            $json = file_get_contents("php://input");
 
+            if(trim($json) != '')
+            {
+                $array_data = array();
+                $array_data = json_decode($json, true);
+
+                if ($array_data != null)
+
+                {
+                    $email = $array_data['email'];
+                    $password = sha1($array_data['password']);
+                    try{
+                        $sql = "SELECT cod_helper AS code, nome_helper AS name, email_helper AS email FROM tbHelper WHERE senha_helper = '$password' AND email_helper = '$email'";
+
+                        $sql = $this->con->prepare($sql);
+
+                        $sql->execute();
+                        $user = $sql->fetch(PDO::FETCH_ASSOC);
+
+                        if(!$user) { throw new Exception("Email ou senha incorretos"); }
+
+                        $user['code'] = (int) $user['code'];
+                        
+                        $id = $user['code'];
+                        $name = $user['name'];
+                        $email = $user['email'];
+                        
+                        
+                        $auth = new Auth();
+
+                        $auth->createToken( $id, $name, $email );
+
+                        return $auth->createToken( $id, $name, $email );
+
+                    }catch(Exception $e){ 
+                        throw new Exception( $e->getMessage());
+                    }
+
+                }
+
+            }
+        }
         
 
     }

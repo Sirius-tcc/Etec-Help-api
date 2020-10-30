@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 28-Out-2020 às 04:27
+-- Tempo de geração: 30-Out-2020 às 05:45
 -- Versão do servidor: 10.4.11-MariaDB
 -- versão do PHP: 7.4.2
 
@@ -47,12 +47,41 @@ CALL my_signal('CPF já existente!');
 END IF;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_create_helper` (IN `name` VARCHAR(12), IN `surname` VARCHAR(12), IN `bio` VARCHAR(140), IN `email` VARCHAR(30), IN `password` CHAR(40))  NO SQL
+BEGIN
+IF NOT EXISTS( SELECT * FROM vwHelper WHERE vwHelper.email = email ) THEN
+INSERT INTO tbHelper(nome_helper , sobrenome_helper , biografia_helper, email_helper, senha_helper) 
+VALUES (name, surname, bio, email, password);
+
+ELSE 
+CALL my_signal('E-mail já existente.');
+END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_delete_helper` (IN `id` INT)  NO SQL
+BEGIN 
+IF EXISTS(SELECT * FROM tbHelper WHERE cod_helper = id) THEN
+DELETE FROM tbHelper WHERE cod_helper = id;
+ELSE
+CALL my_signal('ID do Helper não existe.');
+END IF;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_delete_student` (IN `id` INT)  NO SQL
 BEGIN
 IF EXISTS(SELECT * FROM tbEstudante WHERE cod_estudante = id) THEN
 DELETE FROM tbEstudante WHERE cod_estudante = id;
 ELSE
 	CALL my_signal('Erro ao deletar! estudante não existe.'); 
+END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_delete_video` (IN `id` INT)  NO SQL
+BEGIN
+IF EXISTS(SELECT * FROM tbVideo WHERE cod_video = id) THEN
+DELETE FROM tbVideo WHERE cod_video = id;
+ELSE
+	CALL my_signal('Erro ao deletar! video não existe.'); 
 END IF;
 END$$
 
@@ -69,13 +98,46 @@ WHERE cod_estudante = id;
 END IF;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_save_photo_helper_name` (IN `id` INT, IN `name_photo` VARCHAR(30))  NO SQL
+BEGIN
+IF NOT EXISTS (SELECT * FROM tbHelper WHERE cod_helper = id) THEN
+	CALL my_signal('ID não existe!');
+END IF;
+
+IF (SELECT foto_helper FROM tbHelper WHERE cod_helper = id) IS NULL THEN
+UPDATE tbHelper
+SET foto_helper = name_photo
+WHERE cod_helper = id;
+END IF;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_update_estudante` (IN `id` INT, IN `name` VARCHAR(12), IN `surname` VARCHAR(12), IN `email` VARCHAR(30))  NO SQL
 BEGIN
+IF EXISTS( SELECT code FROM vwEstudantes WHERE code = id  ) THEN 
 UPDATE tbEstudante 
 	SET nome_estudante = name,
     sobrenome_estudante = surname,
     email_estudante = email
     WHERE cod_estudante = id;
+
+ELSE
+CALL my_signal('Estudante não existe!');
+END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_update_helper` (IN `id` INT, IN `name` VARCHAR(12), IN `surname` VARCHAR(12), IN `bio` VARCHAR(140), IN `email` VARCHAR(30))  NO SQL
+BEGIN
+
+IF EXISTS (SELECT cod_helper FROM tbHelper WHERE cod_helper = id) THEN
+	UPDATE tbHelper 
+	SET nome_helper= name,
+	sobrenome_helper = surname,
+	biografia_helper = bio,
+	email_helper = email
+	WHERE cod_helper = id;
+ELSE
+CALL my_signal('Helper não existe.');
+END IF;
 END$$
 
 DELIMITER ;
@@ -122,7 +184,8 @@ CREATE TABLE `tbEstudante` (
 INSERT INTO `tbEstudante` (`cod_estudante`, `foto_estudante`, `nome_estudante`, `sobrenome_estudante`, `email_estudante`, `senha_estudante`) VALUES
 (1, '1.png', 'Vitor', 'Carmo', 'vitorv0071@gmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220'),
 (2, '2.png', 'Beatriz', 'Vitória', 'Beatrizvika@gmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220'),
-(4, '4.png', 'Ana', 'Herley', 'Aninha_Harley123@gmail.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441');
+(4, '4.png', 'Ana', 'Herley', 'Aninha_Harley123@gmail.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441'),
+(6, NULL, 'test', 'test', 'test@gmail.com', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3');
 
 -- --------------------------------------------------------
 
@@ -139,6 +202,15 @@ CREATE TABLE `tbHelper` (
   `email_helper` varchar(30) NOT NULL,
   `senha_helper` varchar(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Extraindo dados da tabela `tbHelper`
+--
+
+INSERT INTO `tbHelper` (`cod_helper`, `foto_helper`, `nome_helper`, `sobrenome_helper`, `biografia_helper`, `email_helper`, `senha_helper`) VALUES
+(1, '1.png', 'George', 'Hotz', 'Olá! me chamo george, gosto de matemática, programação, hacking e hardware, manjo muito dos paranauê, porém, sou um pouco chato', 'gghotz@comma.ai.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef'),
+(3, '3.png', 'Aline', 'Mendonça', 'Eu sou professora da Etec de guaianazes em Desenvolvimento de Sistemas. Caso tenha dúvida em programação só chamar', 'aline@gmail.com', '7751a23fa55170a57e90374df13a3ab78efe0e99'),
+(4, NULL, 'test', 'test', 'hello!', 'test@gmail.com', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3');
 
 -- --------------------------------------------------------
 
@@ -219,6 +291,13 @@ CREATE TABLE `tbTopico` (
   `cod_materia` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Extraindo dados da tabela `tbTopico`
+--
+
+INSERT INTO `tbTopico` (`cod_topico`, `nome_topico`, `icone_topico`, `cod_materia`) VALUES
+(1, 'Aritmética', '1.svg', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -227,11 +306,18 @@ CREATE TABLE `tbTopico` (
 
 CREATE TABLE `tbVideo` (
   `cod_video` int(11) NOT NULL,
-  `url_video` varchar(40) NOT NULL,
+  `url_video` varchar(40) DEFAULT NULL,
   `titulo_video` varchar(40) NOT NULL,
   `descricao_video` varchar(500) DEFAULT NULL,
   `cod_topico` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Extraindo dados da tabela `tbVideo`
+--
+
+INSERT INTO `tbVideo` (`cod_video`, `url_video`, `titulo_video`, `descricao_video`, `cod_topico`) VALUES
+(14, '14.mp4', '#1 - Adição Básica', 'A adição e a subtração são a base de toda a matemática. Este tutorial apresenta a adição e a subtração de números de um algarismo. Você também deverá se familiarizar bastante com a reta numérica!', 1);
 
 -- --------------------------------------------------------
 
@@ -244,6 +330,16 @@ CREATE TABLE `tbView` (
   `data_view` date NOT NULL,
   `cod_video` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Extraindo dados da tabela `tbView`
+--
+
+INSERT INTO `tbView` (`cod_view`, `data_view`, `cod_video`) VALUES
+(1, '2020-10-30', 14),
+(2, '2020-10-30', 14),
+(3, '2020-10-30', 14),
+(4, '2020-10-30', 14);
 
 -- --------------------------------------------------------
 
@@ -262,11 +358,59 @@ CREATE TABLE `vwEstudantes` (
 -- --------------------------------------------------------
 
 --
+-- Estrutura stand-in para vista `vwHelper`
+-- (Veja abaixo para a view atual)
+--
+CREATE TABLE `vwHelper` (
+`code` int(11)
+,`photo` varchar(30)
+,`name` varchar(12)
+,`surname` varchar(12)
+,`bio` varchar(140)
+,`email` varchar(30)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura stand-in para vista `vwVideos`
+-- (Veja abaixo para a view atual)
+--
+CREATE TABLE `vwVideos` (
+`code` int(11)
+,`url` varchar(40)
+,`title` varchar(40)
+,`description` varchar(500)
+,`topico` varchar(30)
+,`views` bigint(21)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para vista `vwEstudantes`
 --
 DROP TABLE IF EXISTS `vwEstudantes`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwEstudantes`  AS  select `tbEstudante`.`cod_estudante` AS `code`,`tbEstudante`.`foto_estudante` AS `photo`,`tbEstudante`.`nome_estudante` AS `name`,`tbEstudante`.`sobrenome_estudante` AS `surname`,`tbEstudante`.`email_estudante` AS `email` from `tbEstudante` ;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para vista `vwHelper`
+--
+DROP TABLE IF EXISTS `vwHelper`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwHelper`  AS  select `tbHelper`.`cod_helper` AS `code`,`tbHelper`.`foto_helper` AS `photo`,`tbHelper`.`nome_helper` AS `name`,`tbHelper`.`sobrenome_helper` AS `surname`,`tbHelper`.`biografia_helper` AS `bio`,`tbHelper`.`email_helper` AS `email` from `tbHelper` ;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para vista `vwVideos`
+--
+DROP TABLE IF EXISTS `vwVideos`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwVideos`  AS  select `tbVideo`.`cod_video` AS `code`,`tbVideo`.`url_video` AS `url`,`tbVideo`.`titulo_video` AS `title`,`tbVideo`.`descricao_video` AS `description`,`tbTopico`.`nome_topico` AS `topico`,count(`tbView`.`cod_video`) AS `views` from ((`tbVideo` left join `tbView` on(`tbView`.`cod_video` = `tbVideo`.`cod_video`)) join `tbTopico` on(`tbTopico`.`cod_topico` = `tbVideo`.`cod_topico`)) group by `tbVideo`.`cod_video` ;
 
 --
 -- Índices para tabelas despejadas
@@ -357,13 +501,13 @@ ALTER TABLE `tbAjuda`
 -- AUTO_INCREMENT de tabela `tbEstudante`
 --
 ALTER TABLE `tbEstudante`
-  MODIFY `cod_estudante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `cod_estudante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `tbHelper`
 --
 ALTER TABLE `tbHelper`
-  MODIFY `cod_helper` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `cod_helper` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `tbMateria`
@@ -393,19 +537,19 @@ ALTER TABLE `tbStatus`
 -- AUTO_INCREMENT de tabela `tbTopico`
 --
 ALTER TABLE `tbTopico`
-  MODIFY `cod_topico` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `cod_topico` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `tbVideo`
 --
 ALTER TABLE `tbVideo`
-  MODIFY `cod_video` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `cod_video` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de tabela `tbView`
 --
 ALTER TABLE `tbView`
-  MODIFY `cod_view` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `cod_view` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restrições para despejos de tabelas

@@ -142,7 +142,6 @@
                     }
                 }else{
                     throw new Exception('Erro ao decodificar o arquivo json. Verifique se ele foi passado corretamente.');
-
                 }
             }else{
                 throw new Exception('empty json');

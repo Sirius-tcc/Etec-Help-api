@@ -13,9 +13,9 @@
         }
 
 
-        public function list()
+        public function list($topic)
         {
-            $sql = "SELECT * FROM vwVideos";
+            $sql = "SELECT * FROM vwVideos WHERE topic = '$topic'";
 
             $sql = $this->con->prepare($sql);
 
@@ -101,6 +101,78 @@
            }
         }
 
+        public function update($id)
+        {
+            $json = file_get_contents("php://input");
+
+            
+            if( $json != '' ){
+
+                $data = array();
+                $data = json_decode($json, true);
+
+                
+                if($data != null){ 
+
+                    $title = $data['title'];
+                    $description = $data['description'];
+
+                    try {
+                        $sql = "CALL sp_update_video($id, '$title', '$description')";
+
+                        $sql = $this->con->prepare($sql);
+
+                        $sql->execute();
+
+                        return 'Video alterado com sucesso!';
+
+                    }catch (Exception $e ){
+                        if($e->getCode() == "42S02"){ throw new Exception("Este video não existe."); }
+
+                        throw new Exception('Erro ao alterar video. Erro: ' . $e->getMessage());
+                    }
+
+                }else{
+                    throw new Exception('Erro ao decodificar o arquivo json. Verifique se ele foi passado corretamente.');
+                }
+ 
+            }else{
+                throw new Exception('No empty json');
+            }
+
+        }
+
+        public function create_view($code_video){
+            $json = file_get_contents("php://input");
+            
+            if( $json != '' ){
+
+                $data = array();
+                $data = json_decode($json, true);
+
+                if($data != null){ 
+                    $divice = $data['device'];
+
+                    try {
+                        $sql = "INSERT tbView(data_hora_view, dispositivo, cod_video)
+                        VALUES ( CURRENT_TIMESTAMP, '$divice', $code_video)";
+                        
+                        $sql = $this->con->prepare($sql);
+                        $sql->execute();
+                        return 'vizualização contada!';
+                    }catch (Exception $e){
+                        throw new Exception('Erro:' . $e->getMessage());
+                    }
+
+                }else{
+                    throw new Exception('Erro ao decodificar o arquivo json. Verifique se ele foi passado corretamente.');
+                }
+ 
+            }else{
+                throw new Exception('No empty json');
+            }
+
+        }
 
         public function delete($id)
         {

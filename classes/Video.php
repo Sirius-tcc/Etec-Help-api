@@ -1,5 +1,5 @@
 <?php
-    include('Custom/UploadVideo.php');
+    include('custom/UploadVideo.php');
 
     class Video {
 
@@ -142,7 +142,8 @@
 
         }
 
-        public function create_view($code_video){
+        public function create_view($code_video)
+        {
             $json = file_get_contents("php://input");
             
             if( $json != '' ){

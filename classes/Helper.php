@@ -26,14 +26,14 @@
             $result = array();
 
             while($row = $sql->fetch(PDO::FETCH_ASSOC)){
+
                 $row['code'] = (int) $row['code'];
                 $row['photo'] = $row['photo'] === null ? $row['photo'] : $this->IMAGE_PATH_HTTP.$row['photo'];
+
                 $result[] = $row;
             }
 
-            if(!$result){
-                throw new Exception("Nenhum Helper cadastrado");
-            }
+            if(!$result){ throw new Exception("Nenhum Helper cadastrado"); }
 
             return $result;
         }
@@ -218,6 +218,40 @@
             }
         }
         
+        public function create_subject_helper($id) {
+            $json = file_get_contents("php://input");
+            if( $json != '' ){
+
+                $data = array();
+                $data = json_decode($json, true);
+                
+                if($data != null) { 
+                    $subject_code = $data['subject_code'];
+
+                    try {
+                        $sql = "CALL sp_create_subject_helper($id, $subject_code)";
+
+                        $this->con->exec($sql);
+        
+                        return 'Cadastro realizado com sucesso';
+    
+                    }catch(Exception $e){
+                        if($e->getCode() == "42S02") {
+                            throw new Exception('Essa matéria já é cadastrado!');
+                        }
+    
+                        throw new Exception("Erro ao cadastrar " . $e->getMessage());
+                    }
+
+                } else {
+                    throw new Exception('Erro ao decodificar o arquivo json. Verifique se ele foi passado corretamente.');
+                }
+ 
+            }else{
+                throw new Exception('No empty json');
+            }
+
+        }
 
     }
 

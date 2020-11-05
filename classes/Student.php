@@ -1,6 +1,6 @@
 <?php
     require_once('Connection.php');
-    include('Custom/UploadImage.php');
+    include('custom/UploadImage.php');
     
     class Student {
         private $con;

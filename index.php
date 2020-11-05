@@ -5,8 +5,10 @@
 
     require_once 'classes/Helper.php';
     require_once 'classes/Student.php';
-    require_once 'classes/Auth.php';
+    require_once 'classes/auth/Auth.php';
     require_once 'classes/Video.php';
+    require_once 'classes/Topic.php';
+    require_once 'classes/Help.php';
 
     class Rest {
         public function open($request){

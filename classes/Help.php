@@ -36,6 +36,31 @@
         }
 
 
+        public function show($id)
+        {
+            $sql = "SELECT * FROM vwAjuda WHERE help_code = $id";
+
+            $sql = $this->con->prepare($sql);
+
+            $sql->execute();
+
+
+            $result = array();
+            while($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+                $row['help_code'] = (int) $row['help_code'];
+                $row['helper_code'] = (int) $row['helper_code'];
+                $row['student_code'] = (int) $row['student_code'];
+                $row['subject_code'] = (int) $row['student_code'];
+               
+                $result[] = $row;
+            }
+
+            if(!$result){ throw new Exception("Nenhuma ajuda com esse id."); }
+
+            return $result;
+        }
+
+
         public function create()
         {
             $json = file_get_contents("php://input");
@@ -71,6 +96,61 @@
             }
         }
 
+        public function classification($id)
+        {
+            $json = file_get_contents("php://input"); 
+
+            if($json != ''){
+                $array_data = array();
+    
+                $array_data = json_decode($json, true);
+
+                $stars = $array_data['stars'];
+                try {
+                    $sql = "CALL sp_set_classification($id, $stars)";
+
+                    $this->con->exec($sql);
+    
+                    return 'Classificação cadastrada com sucesso';
+
+                }catch(Exception $e){
+                    if($e->getCode() == "42S02"){ throw new Exception("Classificação já foi feita."); }
+
+                    throw new Exception("Erro ao cadastrar " . $e->getMessage());
+                }
+
+            }else{
+                throw new Exception('No json found');
+            }
+        }
+
+        public function status($id)
+        {
+            $json = file_get_contents("php://input"); 
+
+            if($json != ''){
+                $array_data = array();
+    
+                $array_data = json_decode($json, true);
+
+                $status_code = $array_data['status_code'];
+                try {
+                    $sql = "UPDATE tbAjuda
+                    SET cod_status = $status_code
+                    WHERE cod_ajuda = $id";
+
+                    $this->con->exec($sql);
+    
+                    return 'Status atualizado com sucesso';
+
+                }catch(Exception $e){
+                    throw new Exception("Erro ao cadastrar " . $e->getMessage());
+                }
+
+            }else{
+                throw new Exception('No json found');
+            }
+        }
     }
 
     /*

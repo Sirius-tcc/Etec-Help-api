@@ -30,6 +30,29 @@
                 $row['code'] = (int) $row['code'];
                 $row['photo'] = $row['photo'] === null ? $row['photo'] : $this->IMAGE_PATH_HTTP.$row['photo'];
 
+
+                // pegar as matérias do helper
+                $subj = "SELECT subject FROM vwSubjectHelpers WHERE helper_code = ". $row['code'] ." ";
+                $subj = $this->con->prepare($subj);
+                $subj->execute();
+
+                $subjects = array();
+
+                while($sub = $subj->fetch(PDO::FETCH_ASSOC)) {
+                    $subjects[] = $sub['subject'];
+                }
+
+                $row['subjects'] = $subjects;
+
+                
+                // pegar as estrelas
+                $classification = "CALL sp_show_classification_helper(" .  $row['code'] . ")";
+                $classification = $this->con->prepare($classification);
+                $classification->execute();
+
+
+                $row['classification'] = (int) $classification->fetch(PDO::FETCH_ASSOC)['classification'];
+
                 $result[] = $row;
             }
 
@@ -51,6 +74,30 @@
             while($row = $sql->fetch(PDO::FETCH_ASSOC)){
                 $row['code'] = (int) $row['code'];
                 $row['photo'] = $row['photo'] === null ? $row['photo'] : $this->IMAGE_PATH_HTTP.$row['photo'];
+
+
+                // pegar as matérias do helper
+                $subj = "SELECT subject FROM vwSubjectHelpers WHERE helper_code = ". $row['code'] ." ";
+                $subj = $this->con->prepare($subj);
+                $subj->execute();
+
+                $subjects = array();
+
+                while($sub = $subj->fetch(PDO::FETCH_ASSOC)) {
+                    $subjects[] = $sub['subject'];
+                }
+
+                $row['subjects'] = $subjects;
+
+                
+                // pegar as estrelas
+                $classification = "CALL sp_show_classification_helper(" .  $row['code'] . ")";
+                $classification = $this->con->prepare($classification);
+                $classification->execute();
+
+
+                $row['classification'] = (int) $classification->fetch(PDO::FETCH_ASSOC)['classification'];
+
                 $result[] = $row;
             }
 

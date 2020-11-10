@@ -5,13 +5,16 @@
     
     class Helper {
         private $con;
-        private $IMAGE_PATH_HTTP = 'http://localhost/Coisas/backend/uploads/images/helper/';
+        private $IMAGE_PATH_HTTP;
         private $IMAGE_PATH = 'uploads/images/helper/';
 
 
         function __construct()
         {
             $this->con = Connection::getConnection();
+            
+            $const = new ConstVariable();
+            $this->IMAGE_PATH_HTTP = "$const->baseUrl" . "$this->IMAGE_PATH";
         }
 
 
@@ -304,3 +307,9 @@
 
     
     
+
+    /*
+        SELECT * FROM tbHelper
+        INNER JOIN tbAjuda
+        ON tbAjuda.cod_helper = tbHelper.cod_helper
+    */

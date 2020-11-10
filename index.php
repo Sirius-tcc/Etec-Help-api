@@ -9,6 +9,7 @@
     require_once 'classes/Video.php';
     require_once 'classes/Topic.php';
     require_once 'classes/Help.php';
+    require_once 'classes/custom/ConstVariable.php';
 
     class Rest {
         public function open($request){

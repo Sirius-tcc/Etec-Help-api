@@ -26,6 +26,7 @@
                 $row['helper_code'] = (int) $row['helper_code'];
                 $row['student_code'] = (int) $row['student_code'];
                 $row['subject_code'] = (int) $row['student_code'];
+                $row['classification'] = (int) $row['classification'];
                
                 $result[] = $row;
             }
@@ -51,6 +52,7 @@
                 $row['helper_code'] = (int) $row['helper_code'];
                 $row['student_code'] = (int) $row['student_code'];
                 $row['subject_code'] = (int) $row['student_code'];
+                $row['classification'] = (int) $row['classification'];
                
                 $result[] = $row;
             }

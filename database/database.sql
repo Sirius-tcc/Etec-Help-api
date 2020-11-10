@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 5.0.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 05-Nov-2020 às 03:48
--- Versão do servidor: 10.4.11-MariaDB
--- versão do PHP: 7.4.2
+-- Tempo de geração: 10-Nov-2020 às 05:00
+-- Versão do servidor: 10.4.14-MariaDB
+-- versão do PHP: 7.4.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -156,6 +155,29 @@ WHERE cod_topico = id;
 END IF;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_set_classification` (IN `id` INT, IN `stars` INT)  NO SQL
+BEGIN
+IF (SELECT tbAjuda.classificacao_ajuda FROM tbAjuda WHERE tbAjuda.cod_ajuda = id) IS NULL THEN
+
+UPDATE tbAjuda
+SET classificacao_ajuda = stars
+WHERE tbAjuda.cod_ajuda = id;
+
+ELSE
+
+CALL my_signal('Ajuda já foi classificada!');
+
+END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_show_classification_helper` (IN `cod_helper` INT)  NO SQL
+BEGIN
+SELECT AVG(tbAjuda.classificacao_ajuda) as classification FROM tbHelper
+INNER JOIN tbAjuda
+ON tbAjuda.cod_helper = tbHelper.cod_helper
+WHERE tbHelper.cod_helper = cod_helper;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_subject_helper` (IN `id` INT)  NO SQL
 BEGIN
 SELECT nome_materia as subject from ((`bdEtecHelp`.`tbHelper` inner join `bdEtecHelp`.`tbMateriaHelper` on(`bdEtecHelp`.`tbMateriaHelper`.`cod_helper` = `bdEtecHelp`.`tbHelper`.`cod_helper`)) inner join `bdEtecHelp`.`tbMateria` on(`bdEtecHelp`.`tbMateriaHelper`.`cod_materia` = `bdEtecHelp`.`tbMateria`.`cod_materia`)) WHERE tbMateriaHelper.cod_helper = id;
@@ -229,7 +251,7 @@ CREATE TABLE `tbAjuda` (
 --
 
 INSERT INTO `tbAjuda` (`cod_ajuda`, `titulo_ajuda`, `descricao_ajuda`, `classificacao_ajuda`, `data_ajuda`, `horario_ajuda`, `local_ajuda`, `cod_materia`, `cod_estudante`, `cod_helper`, `cod_status`) VALUES
-(1, 'Por Favor, me ajude em algebra!', 'Eu não estou conseguindo entender o conceito de variável, hotz. Não entendi direito como funciona tal coisa. Esse negócio de passar para o lado e somar ou subtrair, não entendi direito. Me ajuda por favor.', NULL, '2020-12-17', '15:00:00', 'Perto da biblioteca', 1, 2, 1, 1),
+(1, 'Por Favor, me ajude em algebra!', 'Eu não estou conseguindo entender o conceito de variável, hotz. Não entendi direito como funciona tal coisa. Esse negócio de passar para o lado e somar ou subtrair, não entendi direito. Me ajuda por favor.', 5, '2020-12-17', '15:00:00', 'Perto da biblioteca', 1, 2, 1, 1),
 (2, 'Preciso de ajuda em insert', ' OI, George!! eu vi um vídeo de programação explicando sobre inserts, mas eu não entendi nada. tem como você me ajudar nessa.', NULL, '2020-12-16', '15:50:00', 'Laboratório 4 (DEEP WEB)', 2, 2, 1, 1);
 
 -- --------------------------------------------------------
@@ -486,7 +508,8 @@ CREATE TABLE `vwHelper` (
 -- (Veja abaixo para a view atual)
 --
 CREATE TABLE `vwSubjectHelpers` (
-`name` varchar(12)
+`helper_code` int(11)
+,`name` varchar(12)
 ,`surname` varchar(12)
 ,`subject` varchar(30)
 );
@@ -526,7 +549,7 @@ CREATE TABLE `vwVideos` (
 --
 DROP TABLE IF EXISTS `vwAjuda`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwAjuda`  AS  select `tbAjuda`.`cod_ajuda` AS `help_code`,`tbAjuda`.`titulo_ajuda` AS `title`,`tbAjuda`.`descricao_ajuda` AS `description`,`tbAjuda`.`classificacao_ajuda` AS `classification`,`tbAjuda`.`data_ajuda` AS `date`,`tbAjuda`.`horario_ajuda` AS `time`,`tbAjuda`.`local_ajuda` AS `local`,`tbMateria`.`cod_materia` AS `subject_code`,`tbMateria`.`nome_materia` AS `subject_name`,`tbEstudante`.`cod_estudante` AS `student_code`,`tbEstudante`.`nome_estudante` AS `student_name`,`tbEstudante`.`sobrenome_estudante` AS `student_surname`,`tbHelper`.`cod_helper` AS `helper_code`,`tbHelper`.`nome_helper` AS `helper_name`,`tbHelper`.`sobrenome_helper` AS `helper_surname`,`tbStatus`.`nome_status` AS `status` from ((((`tbAjuda` join `tbEstudante` on(`tbEstudante`.`cod_estudante` = `tbAjuda`.`cod_estudante`)) join `tbHelper` on(`tbHelper`.`cod_helper` = `tbAjuda`.`cod_helper`)) join `tbMateria` on(`tbMateria`.`cod_materia` = `tbAjuda`.`cod_materia`)) join `tbStatus` on(`tbStatus`.`cod_status` = `tbAjuda`.`cod_status`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwAjuda`  AS SELECT `tbAjuda`.`cod_ajuda` AS `help_code`, `tbAjuda`.`titulo_ajuda` AS `title`, `tbAjuda`.`descricao_ajuda` AS `description`, `tbAjuda`.`classificacao_ajuda` AS `classification`, `tbAjuda`.`data_ajuda` AS `date`, `tbAjuda`.`horario_ajuda` AS `time`, `tbAjuda`.`local_ajuda` AS `local`, `tbMateria`.`cod_materia` AS `subject_code`, `tbMateria`.`nome_materia` AS `subject_name`, `tbEstudante`.`cod_estudante` AS `student_code`, `tbEstudante`.`nome_estudante` AS `student_name`, `tbEstudante`.`sobrenome_estudante` AS `student_surname`, `tbHelper`.`cod_helper` AS `helper_code`, `tbHelper`.`nome_helper` AS `helper_name`, `tbHelper`.`sobrenome_helper` AS `helper_surname`, `tbStatus`.`nome_status` AS `status` FROM ((((`tbAjuda` join `tbEstudante` on(`tbEstudante`.`cod_estudante` = `tbAjuda`.`cod_estudante`)) join `tbHelper` on(`tbHelper`.`cod_helper` = `tbAjuda`.`cod_helper`)) join `tbMateria` on(`tbMateria`.`cod_materia` = `tbAjuda`.`cod_materia`)) join `tbStatus` on(`tbStatus`.`cod_status` = `tbAjuda`.`cod_status`)) ;
 
 -- --------------------------------------------------------
 
@@ -535,7 +558,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vwEstudantes`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwEstudantes`  AS  select `tbEstudante`.`cod_estudante` AS `code`,`tbEstudante`.`foto_estudante` AS `photo`,`tbEstudante`.`nome_estudante` AS `name`,`tbEstudante`.`sobrenome_estudante` AS `surname`,`tbEstudante`.`email_estudante` AS `email` from `tbEstudante` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwEstudantes`  AS SELECT `tbEstudante`.`cod_estudante` AS `code`, `tbEstudante`.`foto_estudante` AS `photo`, `tbEstudante`.`nome_estudante` AS `name`, `tbEstudante`.`sobrenome_estudante` AS `surname`, `tbEstudante`.`email_estudante` AS `email` FROM `tbEstudante` ;
 
 -- --------------------------------------------------------
 
@@ -544,7 +567,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vwHelper`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwHelper`  AS  select `tbHelper`.`cod_helper` AS `code`,`tbHelper`.`foto_helper` AS `photo`,`tbHelper`.`nome_helper` AS `name`,`tbHelper`.`sobrenome_helper` AS `surname`,`tbHelper`.`biografia_helper` AS `bio`,`tbHelper`.`email_helper` AS `email` from `tbHelper` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwHelper`  AS SELECT `tbHelper`.`cod_helper` AS `code`, `tbHelper`.`foto_helper` AS `photo`, `tbHelper`.`nome_helper` AS `name`, `tbHelper`.`sobrenome_helper` AS `surname`, `tbHelper`.`biografia_helper` AS `bio`, `tbHelper`.`email_helper` AS `email` FROM `tbHelper` ;
 
 -- --------------------------------------------------------
 
@@ -553,7 +576,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vwSubjectHelpers`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwSubjectHelpers`  AS  select `tbHelper`.`nome_helper` AS `name`,`tbHelper`.`sobrenome_helper` AS `surname`,`tbMateria`.`nome_materia` AS `subject` from ((`tbHelper` left join `tbMateriaHelper` on(`tbMateriaHelper`.`cod_helper` = `tbHelper`.`cod_helper`)) left join `tbMateria` on(`tbMateriaHelper`.`cod_materia` = `tbMateria`.`cod_materia`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwSubjectHelpers`  AS SELECT `tbHelper`.`cod_helper` AS `helper_code`, `tbHelper`.`nome_helper` AS `name`, `tbHelper`.`sobrenome_helper` AS `surname`, `tbMateria`.`nome_materia` AS `subject` FROM ((`tbHelper` left join `tbMateriaHelper` on(`tbMateriaHelper`.`cod_helper` = `tbHelper`.`cod_helper`)) left join `tbMateria` on(`tbMateriaHelper`.`cod_materia` = `tbMateria`.`cod_materia`)) ;
 
 -- --------------------------------------------------------
 
@@ -562,7 +585,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vwTopico`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwTopico`  AS  select `tbTopico`.`cod_topico` AS `code`,`tbTopico`.`nome_topico` AS `name`,`tbTopico`.`icone_topico` AS `icon`,`tbMateria`.`nome_materia` AS `subject` from (`tbTopico` join `tbMateria` on(`tbTopico`.`cod_materia` = `tbMateria`.`cod_materia`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwTopico`  AS SELECT `tbTopico`.`cod_topico` AS `code`, `tbTopico`.`nome_topico` AS `name`, `tbTopico`.`icone_topico` AS `icon`, `tbMateria`.`nome_materia` AS `subject` FROM (`tbTopico` join `tbMateria` on(`tbTopico`.`cod_materia` = `tbMateria`.`cod_materia`)) ;
 
 -- --------------------------------------------------------
 
@@ -571,7 +594,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vwVideos`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwVideos`  AS  select `tbVideo`.`cod_video` AS `code`,`tbVideo`.`url_video` AS `url`,`tbVideo`.`titulo_video` AS `title`,`tbVideo`.`descricao_video` AS `description`,`tbTopico`.`nome_topico` AS `topic`,count(`tbView`.`cod_video`) AS `views` from ((`tbVideo` left join `tbView` on(`tbView`.`cod_video` = `tbVideo`.`cod_video`)) join `tbTopico` on(`tbTopico`.`cod_topico` = `tbVideo`.`cod_topico`)) group by `tbVideo`.`cod_video` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwVideos`  AS SELECT `tbVideo`.`cod_video` AS `code`, `tbVideo`.`url_video` AS `url`, `tbVideo`.`titulo_video` AS `title`, `tbVideo`.`descricao_video` AS `description`, `tbTopico`.`nome_topico` AS `topic`, count(`tbView`.`cod_video`) AS `views` FROM ((`tbVideo` left join `tbView` on(`tbView`.`cod_video` = `tbVideo`.`cod_video`)) join `tbTopico` on(`tbTopico`.`cod_topico` = `tbVideo`.`cod_topico`)) GROUP BY `tbVideo`.`cod_video` ;
 
 --
 -- Índices para tabelas despejadas

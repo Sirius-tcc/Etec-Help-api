@@ -154,17 +154,3 @@
             }
         }
     }
-
-    /*
-        SELECT titulo_ajuda as title,
-        descricao_ajuda as description,
-        classificacao_ajuda as classification,
-        data_ajuda as date,
-        horario_ajuda as hour,
-        local_ajuda as local,
-        cod_materia as subject,
-        cod_estudante as student,
-        cod_helper as helper,
-        cod_status as status
-        from tbAjuda
-    */ 

@@ -20,7 +20,22 @@
 
         public function list()
         {
-            $sql = "SELECT * FROM vwHelper";
+            if(
+                isset($_GET['subject'])   && 
+                $_GET['subject'] != ''
+            ){
+                $subject = $_GET['subject'];
+                // filtrar helper por 
+                $sql = "SELECT code, photo, name, surname, bio, email FROM vwHelper
+                        LEFT JOIN tbMateriaHelper
+                        ON tbMateriaHelper.cod_helper = vwHelper.code
+                        LEFT JOIN tbMateria
+                        ON tbMateria.cod_materia = tbMateriaHelper.cod_materia
+                        WHERE tbMateria.nome_materia = '$subject'";
+
+            }else{ 
+                $sql = "SELECT * FROM vwHelper"; 
+            }
             
             $sql = $this->con->prepare($sql);
 
@@ -251,13 +266,12 @@
                         $id = $user['code'];
                         $name = $user['name'];
                         $email = $user['email'];
-                        
+                        $type = "helper";
                         
                         $auth = new Auth();
 
-                        $auth->createToken( $id, $name, $email );
 
-                        return $auth->createToken( $id, $name, $email );
+                        return $auth->createToken( $id, $name, $email, $type );
 
                     }catch(Exception $e){ 
                         throw new Exception( $e->getMessage());
@@ -309,7 +323,10 @@
     
 
     /*
-        SELECT * FROM tbHelper
-        INNER JOIN tbAjuda
-        ON tbAjuda.cod_helper = tbHelper.cod_helper
-    */
+      SELECT code, photo, name, surname, bio, email FROM vwHelper
+LEFT JOIN tbMateriaHelper
+ON tbMateriaHelper.cod_helper = vwHelper.code
+LEFT JOIN tbMateria
+ON tbMateria.cod_materia = tbMateriaHelper.cod_materia
+WHERE tbMateria.nome_materia = 'Programação'*/
+

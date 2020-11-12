@@ -10,6 +10,8 @@
         function __construct() 
         {
             $this->con = Connection::getConnection();
+            $const = new ConstVariable();
+            $this->IMAGE_PATH_HTTP = "$const->baseUrl" . "$this->IMAGE_PATH";
         }
 
 

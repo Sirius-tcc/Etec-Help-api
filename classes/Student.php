@@ -4,13 +4,15 @@
     
     class Student {
         private $con;
-        private $IMAGE_PATH_HTTP = 'http://localhost/Coisas/backend/uploads/images/student/';
+        private $IMAGE_PATH_HTTP;
         private $IMAGE_PATH = 'uploads/images/student/';
 
 
         function __construct() 
         {
             $this->con = Connection::getConnection();
+            $const = new ConstVariable();
+            $this->IMAGE_PATH_HTTP = "$const->baseUrl" . "$this->IMAGE_PATH";
         }
 
         public function list()
@@ -207,13 +209,12 @@
                         $id = $user['code'];
                         $name = $user['name'];
                         $email = $user['email'];
-                        
+                        $type = "student";
                         
                         $auth = new Auth();
 
-                        $auth->createToken( $id, $name, $email );
 
-                        return $auth->createToken( $id, $name, $email );
+                        return $auth->createToken( $id, $name, $email, $type );
 
                     }catch(Exception $e){ 
                         throw new Exception( $e->getMessage());

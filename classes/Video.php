@@ -4,12 +4,14 @@
     class Video {
 
         private $VIDEO_PATH = 'uploads/videos/';
-        private $VIDEO_PATH_HTTP = 'http://localhost/Coisas/backend/uploads/videos/';
+        private $VIDEO_PATH_HTTP;
 
 
         function __construct()
         {
             $this->con = Connection::getConnection();
+            $const = new ConstVariable();
+            $this->VIDEO_PATH_HTTP = "$const->baseUrl" . "$this->VIDEO_PATH";
         }
 
 

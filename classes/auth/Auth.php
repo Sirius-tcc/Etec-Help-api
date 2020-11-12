@@ -5,7 +5,7 @@
         private $key =  '40028922-3t3c-h3lp-4pl1c4t10n-k3y-40028922';
 
 
-        public function createToken($id, $name, $email ) 
+        public function createToken($id, $name, $email, $type ) 
         {
             
              //Header Token
@@ -19,6 +19,7 @@
                  'id' => $id,
                  'name' => $name,
                  'email' => $email,
+                 'type' => $type,
              ];
 
              //JSON

@@ -10,7 +10,7 @@
         {
             $this->localhost = "localhost";
             $this->port = "8080";
-            $this->host = "$this->localhost:$this->port";
+            $this->host = "http://$this->localhost:$this->port";
             $this->baseUrl = "$this->host/Coisas/backend/";
         }
         

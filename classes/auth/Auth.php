@@ -50,10 +50,16 @@
                 //$bearer[0] = 'bearer';
                 //$bearer[1] = 'token jwt';
 
+
                 $token = explode('.', $bearer[1]);
+
+                if( sizeof($token) !== 3){ return false; }
+                
                 $header = $token[0];
                 $payload = $token[1];
                 $sign = $token[2];
+
+                
 
                 //Conferir Assinatura
                 $valid = hash_hmac('sha256', $header . "." . $payload, $this->key, true);

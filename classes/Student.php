@@ -225,5 +225,36 @@
             }
         }
 
+        public function checkLogin()
+        {
+            $json = file_get_contents("php://input");
+
+            if(trim($json) != '')
+            {
+                $array_data = array();
+                $array_data = json_decode($json, true);
+                if ($array_data != null)
+                {
+                    $email = $array_data['email'];
+
+                    try{
+                        $sql = "CALL sp_check_estudante('$email')";
+                        $sql = $this->con->prepare($sql);
+                        $sql->execute();
+
+                        return "Sucesso: Email não existente no banco de dados";
+
+                    }catch(Exception $e){ 
+                        if($e->getCode()=="42S02"){throw new Exception("Email já existente");}
+                        throw new Exception( $e->getMessage());
+                    }
+
+                }
+
+            }else{
+                throw new Exception("No json found");
+            }
+
+        }
 
     }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 17-Nov-2020 às 03:44
+-- Tempo de geração: 19-Nov-2020 às 04:28
 -- Versão do servidor: 10.4.14-MariaDB
 -- versão do PHP: 7.4.11
 
@@ -90,12 +90,8 @@ IF NOT EXISTS( SELECT * FROM tbMateriaHelper WHERE tbMateriaHelper.cod_helper = 
 AND 
 tbMateriaHelper.cod_materia = id_subject  
 ) THEN
-
 INSERT INTO tbMateriaHelper( cod_helper , cod_materia ) 
 VALUES ( id_helper, id_subject );
-
-ELSE 
-CALL my_signal('E-mail já existente.');
 END IF;
 END$$
 
@@ -124,6 +120,18 @@ IF EXISTS(SELECT * FROM tbEstudante WHERE cod_estudante = id) THEN
 DELETE FROM tbEstudante WHERE cod_estudante = id;
 ELSE
 	CALL my_signal('Erro ao deletar! estudante não existe.'); 
+END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_delete_subject` (IN `helper_code` INT, IN `subject_code` INT)  NO SQL
+BEGIN
+IF EXISTS(SELECT * FROM tbMateriaHelper WHERE tbMateriaHelper.cod_helper = helper_code 
+or tbMateriaHelper.cod_materia = subject_code ) THEN
+
+    DELETE FROM tbMateriaHelper 
+    WHERE tbMateriaHelper.cod_helper = helper_code
+    AND tbMateriaHelper.cod_materia = subject_code;
+
 END IF;
 END$$
 
@@ -217,7 +225,7 @@ CALL my_signal('Estudante não existe!');
 END IF;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_update_helper` (IN `id` INT, IN `name` VARCHAR(12), IN `bio` VARCHAR(140), IN `surname` VARCHAR(12), IN `email` VARCHAR(30))  NO SQL
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_update_helper` (IN `id` INT, IN `name` VARCHAR(12), IN `surname` VARCHAR(12), IN `bio` VARCHAR(300), IN `email` VARCHAR(30))  NO SQL
 BEGIN
 
 IF EXISTS (SELECT cod_helper FROM tbHelper WHERE cod_helper = id) THEN
@@ -295,12 +303,14 @@ CREATE TABLE `tbEstudante` (
 
 INSERT INTO `tbEstudante` (`cod_estudante`, `foto_estudante`, `nome_estudante`, `sobrenome_estudante`, `email_estudante`, `senha_estudante`) VALUES
 (1, '1.png', 'Vitor', 'Carmo', 'vitorv0071@gmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220'),
-(2, '2.png', 'Beatriz', 'Vitória', 'Beatrizvika@gmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220'),
+(2, '2.png', 'Beatriz', 'Vitória', 'beatrizvika@gmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220'),
 (4, '4.png', 'Ana', 'Herley', 'Aninha_Harley123@gmail.com', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441'),
 (6, NULL, 'test', 'test', 'test@gmail.com', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3'),
 (7, NULL, 'José', 'Nilton', 'nilton@gmail.com', '7751a23fa55170a57e90374df13a3ab78efe0e99'),
 (8, NULL, 'Beatriz', 'França', 'beabea@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef'),
-(9, '9.png', 'Brendo', 'Carmo', 'tionamae2@gmail.com', 'bd0e51e8b59bbf8a2c24c46e54e094cc73843447');
+(9, '9.png', 'Brendo', 'Carmo', 'tionamae2@gmail.com', 'bd0e51e8b59bbf8a2c24c46e54e094cc73843447'),
+(10, '10.png', 'Rutieny', 'Pires', 'ruty.pires@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef'),
+(11, '11.png', 'Joaquim', 'Vinicius', 'jokas@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef');
 
 -- --------------------------------------------------------
 
@@ -313,7 +323,7 @@ CREATE TABLE `tbHelper` (
   `foto_helper` varchar(30) DEFAULT NULL,
   `nome_helper` varchar(12) NOT NULL,
   `sobrenome_helper` varchar(12) NOT NULL,
-  `biografia_helper` varchar(140) DEFAULT NULL,
+  `biografia_helper` varchar(300) DEFAULT NULL,
   `email_helper` varchar(100) NOT NULL,
   `senha_helper` varchar(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -323,9 +333,12 @@ CREATE TABLE `tbHelper` (
 --
 
 INSERT INTO `tbHelper` (`cod_helper`, `foto_helper`, `nome_helper`, `sobrenome_helper`, `biografia_helper`, `email_helper`, `senha_helper`) VALUES
-(1, '1.png', 'George', 'Hotz', 'Olá! me chamo george, gosto de matemática, programação, hacking e hardware, manjo muito dos paranauê, porém, sou um pouco chato', 'gghotz@comma.ai.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef'),
+(1, '1.png', 'George', 'Hotz', 'Olá! me chamo george.\nGosto de matemática, programação, hacking e hardware, manjo muito dos paranauê, porém, sou um pouco chato.\n\nSe precisar de ajuda só me chamar', 'gghotz@comma.ai.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef'),
 (3, '3.png', 'Aline', 'Mendonça', 'Eu sou professora da Etec de guaianazes em Desenvolvimento de Sistemas. Caso tenha dúvida em programação só chamar', 'aline@gmail.com', '7751a23fa55170a57e90374df13a3ab78efe0e99'),
-(8, NULL, 'Antonio', 'Junior', NULL, 'antoniojr@gmail.com', '925f631c4ece772dceaee694ceb09e43bf07e5c9');
+(8, '8.png', 'Antonio', 'Junior', 'Olá eu sou o professor junior!\n\nEu gosto bastante de robótica, astrofísica, programação e qualquer coisa que envolve tecnologia e ciência.\n\nSe precisar de ajuda é só me chamar (uma ajuda que envolva programação)', 'antoniojr@gmail.com', '925f631c4ece772dceaee694ceb09e43bf07e5c9'),
+(9, '9.png', 'Vanessa', 'Souza', '', 'vanessa@gmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220'),
+(11, NULL, 'Mateus', 'Araujo', 'Manjo muito de programação e lógica. \nJá alteirei um css de um framework inteiro na mão só por diversão, se quiser aprender lógica só entrar em contato', 'mateusAraujo@gmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220'),
+(12, '12.png', 'Clodoaldo', 'Silva', '', 'clodo@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef');
 
 -- --------------------------------------------------------
 
@@ -389,7 +402,12 @@ CREATE TABLE `tbMateriaHelper` (
 INSERT INTO `tbMateriaHelper` (`cod_materia_helper`, `cod_materia`, `cod_helper`) VALUES
 (1, 1, 1),
 (2, 2, 1),
-(3, 1, 3);
+(3, 1, 3),
+(5, 2, 3),
+(10, 2, 8),
+(13, 2, 9),
+(16, 2, 11),
+(18, 2, 12);
 
 -- --------------------------------------------------------
 
@@ -511,7 +529,6 @@ INSERT INTO `tbVideo` (`cod_video`, `url_video`, `titulo_video`, `descricao_vide
 CREATE TABLE `tbView` (
   `cod_view` int(11) NOT NULL,
   `data_hora_view` datetime NOT NULL,
-  `dispositivo` varchar(30) NOT NULL,
   `cod_video` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -519,13 +536,28 @@ CREATE TABLE `tbView` (
 -- Extraindo dados da tabela `tbView`
 --
 
-INSERT INTO `tbView` (`cod_view`, `data_hora_view`, `dispositivo`, `cod_video`) VALUES
-(5, '2020-10-31 00:38:17', 'desktop', 14),
-(6, '2020-10-31 00:38:31', 'desktop', 14),
-(7, '2020-10-31 00:38:32', 'desktop', 14),
-(8, '2020-10-31 00:38:32', 'desktop', 14),
-(9, '2020-10-31 00:38:33', 'desktop', 14),
-(10, '2020-10-31 00:38:33', 'desktop', 14);
+INSERT INTO `tbView` (`cod_view`, `data_hora_view`, `cod_video`) VALUES
+(5, '2020-10-31 00:38:17', 14),
+(6, '2020-10-31 00:38:31', 14),
+(7, '2020-10-31 00:38:32', 14),
+(8, '2020-10-31 00:38:32', 14),
+(9, '2020-10-31 00:38:33', 14),
+(10, '2020-10-31 00:38:33', 14),
+(11, '2020-11-18 22:11:13', 14),
+(12, '2020-11-18 23:37:00', 24),
+(13, '2020-11-18 23:38:20', 24),
+(14, '2020-11-18 23:38:31', 14),
+(15, '2020-11-18 23:38:40', 24),
+(16, '2020-11-18 23:38:51', 24),
+(17, '2020-11-18 23:38:58', 14),
+(18, '2020-11-18 23:39:31', 25),
+(19, '2020-11-18 23:40:51', 25),
+(20, '2020-11-18 23:41:05', 25),
+(21, '2020-11-18 23:41:13', 25),
+(22, '2020-11-18 23:41:32', 25),
+(23, '2020-11-18 23:44:05', 24),
+(24, '2020-11-18 23:44:51', 14),
+(25, '2020-11-18 23:45:44', 24);
 
 -- --------------------------------------------------------
 
@@ -577,7 +609,7 @@ CREATE TABLE `vwHelper` (
 ,`photo` varchar(30)
 ,`name` varchar(12)
 ,`surname` varchar(12)
-,`bio` varchar(140)
+,`bio` varchar(300)
 ,`email` varchar(100)
 );
 
@@ -605,6 +637,7 @@ CREATE TABLE `vwMensagens` (
 --
 CREATE TABLE `vwSubjectHelpers` (
 `helper_code` int(11)
+,`subject_code` int(11)
 ,`name` varchar(12)
 ,`surname` varchar(12)
 ,`subject` varchar(30)
@@ -630,7 +663,8 @@ CREATE TABLE `vwTopico` (
 -- (Veja abaixo para a view atual)
 --
 CREATE TABLE `vwVideos` (
-`code` int(11)
+`icon` varchar(40)
+,`code` int(11)
 ,`url` varchar(40)
 ,`title` varchar(60)
 ,`description` varchar(3000)
@@ -681,7 +715,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vwSubjectHelpers`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwSubjectHelpers`  AS SELECT `tbHelper`.`cod_helper` AS `helper_code`, `tbHelper`.`nome_helper` AS `name`, `tbHelper`.`sobrenome_helper` AS `surname`, `tbMateria`.`nome_materia` AS `subject` FROM ((`tbHelper` left join `tbMateriaHelper` on(`tbMateriaHelper`.`cod_helper` = `tbHelper`.`cod_helper`)) left join `tbMateria` on(`tbMateriaHelper`.`cod_materia` = `tbMateria`.`cod_materia`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwSubjectHelpers`  AS SELECT `tbHelper`.`cod_helper` AS `helper_code`, `tbMateria`.`cod_materia` AS `subject_code`, `tbHelper`.`nome_helper` AS `name`, `tbHelper`.`sobrenome_helper` AS `surname`, `tbMateria`.`nome_materia` AS `subject` FROM ((`tbHelper` left join `tbMateriaHelper` on(`tbMateriaHelper`.`cod_helper` = `tbHelper`.`cod_helper`)) left join `tbMateria` on(`tbMateriaHelper`.`cod_materia` = `tbMateria`.`cod_materia`)) ORDER BY `tbMateria`.`cod_materia` ASC ;
 
 -- --------------------------------------------------------
 
@@ -699,7 +733,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vwVideos`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwVideos`  AS SELECT `tbVideo`.`cod_video` AS `code`, `tbVideo`.`url_video` AS `url`, `tbVideo`.`titulo_video` AS `title`, `tbVideo`.`descricao_video` AS `description`, `tbTopico`.`nome_topico` AS `topic`, count(`tbView`.`cod_video`) AS `views` FROM ((`tbVideo` left join `tbView` on(`tbView`.`cod_video` = `tbVideo`.`cod_video`)) join `tbTopico` on(`tbTopico`.`cod_topico` = `tbVideo`.`cod_topico`)) GROUP BY `tbVideo`.`cod_video` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwVideos`  AS SELECT `tbTopico`.`icone_topico` AS `icon`, `tbVideo`.`cod_video` AS `code`, `tbVideo`.`url_video` AS `url`, `tbVideo`.`titulo_video` AS `title`, `tbVideo`.`descricao_video` AS `description`, `tbTopico`.`nome_topico` AS `topic`, count(`tbView`.`cod_video`) AS `views` FROM ((`tbVideo` left join `tbView` on(`tbView`.`cod_video` = `tbVideo`.`cod_video`)) join `tbTopico` on(`tbTopico`.`cod_topico` = `tbVideo`.`cod_topico`)) GROUP BY `tbVideo`.`cod_video` ;
 
 --
 -- Índices para tabelas despejadas
@@ -797,13 +831,13 @@ ALTER TABLE `tbAjuda`
 -- AUTO_INCREMENT de tabela `tbEstudante`
 --
 ALTER TABLE `tbEstudante`
-  MODIFY `cod_estudante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `cod_estudante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de tabela `tbHelper`
 --
 ALTER TABLE `tbHelper`
-  MODIFY `cod_helper` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `cod_helper` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de tabela `tbLocal`
@@ -821,7 +855,7 @@ ALTER TABLE `tbMateria`
 -- AUTO_INCREMENT de tabela `tbMateriaHelper`
 --
 ALTER TABLE `tbMateriaHelper`
-  MODIFY `cod_materia_helper` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `cod_materia_helper` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de tabela `tbMensagem`
@@ -851,7 +885,7 @@ ALTER TABLE `tbVideo`
 -- AUTO_INCREMENT de tabela `tbView`
 --
 ALTER TABLE `tbView`
-  MODIFY `cod_view` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `cod_view` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Restrições para despejos de tabelas

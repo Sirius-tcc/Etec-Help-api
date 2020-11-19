@@ -4,14 +4,17 @@
     class Video {
 
         private $VIDEO_PATH = 'uploads/videos/';
+        private $ICON_PATH = 'uploads/images/icon/';
         private $VIDEO_PATH_HTTP;
-
+        private $ICON_PATH_HTTP;
 
         function __construct()
         {
             $this->con = Connection::getConnection();
             $const = new ConstVariable();
+            
             $this->VIDEO_PATH_HTTP = "$const->baseUrl" . "$this->VIDEO_PATH";
+            $this->ICON_PATH_HTTP = "$const->baseUrl" . "$this->ICON_PATH";
         }
 
 
@@ -28,6 +31,7 @@
             while($row = $sql->fetch(PDO::FETCH_ASSOC)){
                 $row['code'] = (int) $row['code'];
                 $row['url'] = $this->VIDEO_PATH_HTTP.$row['url'];
+                $row['icon'] = $this->ICON_PATH_HTTP.$row['icon'];
                 $result[] = $row;
             }
 
@@ -51,6 +55,8 @@
             while($row = $sql->fetch(PDO::FETCH_ASSOC)){
                 $row['code'] = (int) $row['code'];
                 $row['url'] = $this->VIDEO_PATH_HTTP.$row['url'];
+                $row['icon'] = $this->ICON_PATH_HTTP.$row['icon'];
+
                 $result[] = $row;
             }
 
@@ -146,35 +152,17 @@
 
         public function create_view($code_video)
         {
-            $json = file_get_contents("php://input");
-            
-            if( $json != '' ){
 
-                $data = array();
-                $data = json_decode($json, true);
-
-                if($data != null){ 
-                    $divice = $data['device'];
-
-                    try {
-                        $sql = "INSERT tbView(data_hora_view, dispositivo, cod_video)
-                        VALUES ( CURRENT_TIMESTAMP, '$divice', $code_video)";
-                        
-                        $sql = $this->con->prepare($sql);
-                        $sql->execute();
-                        return 'vizualização contada!';
-                    }catch (Exception $e){
-                        throw new Exception('Erro:' . $e->getMessage());
-                    }
-
-                }else{
-                    throw new Exception('Erro ao decodificar o arquivo json. Verifique se ele foi passado corretamente.');
-                }
- 
-            }else{
-                throw new Exception('No empty json');
+            try {
+                $sql = "INSERT tbView(data_hora_view, cod_video)
+                VALUES ( CURRENT_TIMESTAMP, $code_video)";
+                
+                $sql = $this->con->prepare($sql);
+                $sql->execute();
+                return 'vizualização contada!';
+            }catch (Exception $e){
+                throw new Exception('Erro:' . $e->getMessage());
             }
-
         }
 
         public function delete($id)

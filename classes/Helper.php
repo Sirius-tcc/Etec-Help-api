@@ -251,7 +251,12 @@
                     $email = $array_data['email'];
                     $password = sha1($array_data['password']);
                     try{
-                        $sql = "SELECT cod_helper AS code, nome_helper AS name, email_helper AS email FROM tbHelper WHERE senha_helper = '$password' AND email_helper = '$email'";
+                        $sql = "SELECT cod_helper AS code, 
+                                nome_helper AS name, 
+                                sobrenome_helper as surname,
+                                email_helper AS email,
+                                foto_helper AS photo 
+                                FROM tbHelper WHERE senha_helper = '$password' AND email_helper = '$email'";
 
                         $sql = $this->con->prepare($sql);
 
@@ -264,13 +269,14 @@
                         
                         $id = $user['code'];
                         $name = $user['name'];
+                        $surname = $user['surname'];
                         $email = $user['email'];
+                        $img = $user['photo'] === null ? $user['photo'] : $this->IMAGE_PATH_HTTP.$user['photo'];
                         $type = "helper";
                         
                         $auth = new Auth();
 
-
-                        return $auth->createToken( $id, $name, $email, $type );
+                        return $auth->createToken( $id, $name, $surname, $email, $img, $type );
 
                     }catch(Exception $e){ 
                         throw new Exception( $e->getMessage());
@@ -347,6 +353,42 @@
                 throw new Exception("No json found");
             }
 
+        }
+
+        public function delete_subject($helper_code){
+
+            $json = file_get_contents("php://input");
+            
+            if(trim($json) != '')
+            {
+                $array_data = array();
+                $array_data = json_decode($json, true);
+
+                if ($array_data != null)
+                {
+
+                    $subject_code = $array_data['subject_code'];  
+
+                    try{
+                
+                        $sql = "CALL sp_delete_subject($helper_code, $subject_code)";
+        
+                        $this->con->exec($sql);
+        
+                        return 'Exclusão realizada com sucesso';
+        
+                    }catch(Exception $e){
+                        if($e->getCode() == "42S02"){ throw new Exception("Id do Helper não existe ou matéria"); }
+                        
+                        throw new Exception('Erro ao deletar usuário. Erro: ' . $e->getMessage());
+                    }
+
+                } else {
+                    throw new Exception('Erro ao decodificar o arquivo json. Verifique se ele foi passado corretamente.');
+                }
+            }else{
+                throw new Exception('No empty json');
+            }
         }
     }
 

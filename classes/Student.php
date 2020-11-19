@@ -193,8 +193,12 @@
                     $email = $array_data['email'];
                     $password = sha1($array_data['password']);
                     try{
-                        $sql = "SELECT cod_estudante AS code, nome_estudante AS name, email_estudante AS email FROM 
-                        tbEstudante WHERE senha_estudante = '$password' AND email_estudante = '$email'";
+                        $sql = "SELECT cod_estudante AS code, 
+                                nome_estudante AS name, 
+                                sobrenome_estudante AS surname,
+                                email_estudante AS email,
+                                foto_estudante AS photo
+                                FROM tbEstudante WHERE senha_estudante = '$password' AND email_estudante = '$email'";
 
                         $sql = $this->con->prepare($sql);
 
@@ -208,13 +212,15 @@
                         
                         $id = $user['code'];
                         $name = $user['name'];
+                        $surname = $user['surname'];
                         $email = $user['email'];
+                        $img = $user['photo'] === null ? $user['photo'] : $this->IMAGE_PATH_HTTP.$user['photo'];
                         $type = "student";
                         
                         $auth = new Auth();
 
 
-                        return $auth->createToken( $id, $name, $email, $type );
+                        return $auth->createToken( $id, $name, $surname, $email, $img, $type);
 
                     }catch(Exception $e){ 
                         throw new Exception( $e->getMessage());

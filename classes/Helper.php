@@ -48,6 +48,14 @@
                 $row['code'] = (int) $row['code'];
                 $row['photo'] = $row['photo'] === null ? $row['photo'] : $this->IMAGE_PATH_HTTP.$row['photo'];
 
+                // pegar as ajudas dadas por cada helper
+                $helps= "SELECT COUNT(tbAjuda.cod_helper) as helps FROM vwHelper 
+                INNER JOIN tbAjuda
+                ON tbAjuda.cod_helper = vwHelper.code
+                WHERE vwHelper.code =" .  $row['code'] . "";
+                $helps = $this->con->prepare($helps);
+                $helps->execute();
+                $row['helps'] = (int) $helps->fetch(PDO::FETCH_ASSOC)['helps'];
 
                 // pegar as matérias do helper
                 $subj = "SELECT subject FROM vwSubjectHelpers WHERE helper_code = ". $row['code'] ." ";
@@ -67,7 +75,6 @@
                 $classification = "CALL sp_show_classification_helper(" .  $row['code'] . ")";
                 $classification = $this->con->prepare($classification);
                 $classification->execute();
-
 
                 $row['classification'] = (int) $classification->fetch(PDO::FETCH_ASSOC)['classification'];
 

@@ -55,6 +55,7 @@
             $sql = "SELECT * FROM vwMensagens 
                     WHERE student_code = $student_code AND
                     helper_code = $helper_code
+                    ORDER BY code DESC
             ";
             
             $sql = $this->con->prepare($sql);

@@ -11,9 +11,9 @@
         }
 
 
-        public function list()
+        public function list($helper_code)
         {
-            $sql = "SELECT * FROM vwAjuda";
+            $sql = "SELECT * FROM vwAjuda WHERE helper_code = $helper_code";
 
             $sql = $this->con->prepare($sql);
 

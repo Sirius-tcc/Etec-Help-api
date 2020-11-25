@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 19-Nov-2020 às 04:28
+-- Tempo de geração: 25-Nov-2020 às 04:01
 -- Versão do servidor: 10.4.14-MariaDB
 -- versão do PHP: 7.4.11
 
@@ -280,7 +280,7 @@ CREATE TABLE `tbAjuda` (
 
 INSERT INTO `tbAjuda` (`cod_ajuda`, `titulo_ajuda`, `descricao_ajuda`, `classificacao_ajuda`, `data_ajuda`, `horario_ajuda`, `cod_materia`, `cod_estudante`, `cod_helper`, `cod_status`, `cod_local`) VALUES
 (1, 'Por Favor, me ajude em algebra!', 'Eu não estou conseguindo entender o conceito de variável, hotz. Não entendi direito como funciona tal coisa. Esse negócio de passar para o lado e somar ou subtrair, não entendi direito. Me ajuda por favor.', 5, '2020-12-17', '15:00:00', 1, 2, 1, 2, 7),
-(4, 'Preciso de ajuda em insert', ' OI, George!! eu vi um vídeo de programação explicando sobre inserts, mas eu não entendi nada. tem como você me ajudar nessa.', NULL, '2020-12-16', '15:50:00', 2, 2, 1, 1, 4);
+(4, 'Preciso de ajuda em insert', ' OI, George!! eu vi um vídeo de programação explicando sobre inserts, mas eu não entendi nada. tem como você me ajudar nessa.', NULL, '2020-12-16', '15:50:00', 2, 2, 1, 2, 4);
 
 -- --------------------------------------------------------
 
@@ -336,9 +336,9 @@ INSERT INTO `tbHelper` (`cod_helper`, `foto_helper`, `nome_helper`, `sobrenome_h
 (1, '1.png', 'George', 'Hotz', 'Olá! me chamo george.\nGosto de matemática, programação, hacking e hardware, manjo muito dos paranauê, porém, sou um pouco chato.\n\nSe precisar de ajuda só me chamar', 'gghotz@comma.ai.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef'),
 (3, '3.png', 'Aline', 'Mendonça', 'Eu sou professora da Etec de guaianazes em Desenvolvimento de Sistemas. Caso tenha dúvida em programação só chamar', 'aline@gmail.com', '7751a23fa55170a57e90374df13a3ab78efe0e99'),
 (8, '8.png', 'Antonio', 'Junior', 'Olá eu sou o professor junior!\n\nEu gosto bastante de robótica, astrofísica, programação e qualquer coisa que envolve tecnologia e ciência.\n\nSe precisar de ajuda é só me chamar (uma ajuda que envolva programação)', 'antoniojr@gmail.com', '925f631c4ece772dceaee694ceb09e43bf07e5c9'),
-(9, '9.png', 'Vanessa', 'Souza', '', 'vanessa@gmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220'),
+(9, '9.png', 'Vanessa', 'Souza', 'Sou a professora, vanessa!\nE sou capacitada para ensinar matemática básica e do ensino fundamental com propriedade.\n\ncaso precisar de ajuda, só entrar em contato.', 'vanessa@gmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220'),
 (11, NULL, 'Mateus', 'Araujo', 'Manjo muito de programação e lógica. \nJá alteirei um css de um framework inteiro na mão só por diversão, se quiser aprender lógica só entrar em contato', 'mateusAraujo@gmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220'),
-(12, '12.png', 'Clodoaldo', 'Silva', '', 'clodo@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef');
+(12, '12.png', 'Clodoaldo', 'Silva', 'Olá eu sou o clodoaldo. Gosto bastante de redes,  banco de dados e robótica.\n\nSe precisar de ajuda em álgebra, geometria e funções e matemática em geral só me chamar!', 'clodo@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef');
 
 -- --------------------------------------------------------
 
@@ -405,9 +405,10 @@ INSERT INTO `tbMateriaHelper` (`cod_materia_helper`, `cod_materia`, `cod_helper`
 (3, 1, 3),
 (5, 2, 3),
 (10, 2, 8),
-(13, 2, 9),
 (16, 2, 11),
-(18, 2, 12);
+(18, 2, 12),
+(19, 1, 12),
+(20, 1, 9);
 
 -- --------------------------------------------------------
 
@@ -453,7 +454,155 @@ INSERT INTO `tbMensagem` (`cod_mensagem`, `texto_mensagem`, `data_mensagem`, `ho
 (22, '...', '2020-11-11', '16:48:09', 2, 3, 'student'),
 (23, '...', '2020-11-11', '18:09:32', 1, 3, 'student'),
 (24, 'O que foi bia?', '2020-11-11', '18:15:19', 2, 3, 'helper'),
-(25, '...', '2020-11-11', '18:15:48', 2, 1, 'helper');
+(25, '...', '2020-11-11', '18:15:48', 2, 1, 'helper'),
+(26, 'oi', '2020-11-19', '23:25:04', 2, 8, 'student'),
+(27, '....', '2020-11-19', '23:28:20', 2, 1, 'student'),
+(28, 'testando', '2020-11-20', '16:28:11', 2, 1, 'helper'),
+(29, 'testando', '2020-11-20', '16:28:43', 2, 8, 'helper'),
+(30, 'olá bia', '2020-11-20', '16:32:59', 2, 8, 'helper'),
+(31, 'Foi nada não desculpa', '2020-11-20', '18:13:16', 2, 3, 'student'),
+(33, 'Hello george!', '2020-11-20', '20:41:41', 2, 1, 'student'),
+(34, 'olá', '2020-11-20', '20:58:50', 2, 1, 'student'),
+(35, 'olá', '2020-11-20', '21:02:54', 2, 1, 'student'),
+(36, 'oiii de novo', '2020-11-20', '21:03:02', 2, 1, 'student'),
+(37, '...', '2020-11-20', '21:03:09', 2, 1, 'student'),
+(38, 'hey', '2020-11-20', '21:03:52', 2, 1, 'student'),
+(39, 'estou só testando', '2020-11-20', '21:06:50', 2, 1, 'student'),
+(40, '.', '2020-11-20', '21:07:17', 2, 1, 'student'),
+(41, 'hello', '2020-11-20', '21:13:11', 2, 1, 'student'),
+(42, 'hello', '2020-11-20', '21:13:13', 2, 1, 'student'),
+(43, 'aaa', '2020-11-20', '21:15:43', 2, 1, 'student'),
+(44, 'aaa', '2020-11-20', '21:15:45', 2, 1, 'student'),
+(45, 'aaa', '2020-11-20', '21:16:33', 2, 1, 'student'),
+(46, 'aaa', '2020-11-20', '21:16:44', 2, 1, 'student'),
+(61, 'oi', '2020-11-20', '21:30:44', 2, 1, 'student'),
+(62, 'oi', '2020-11-20', '21:30:46', 2, 1, 'student'),
+(63, 'oi', '2020-11-20', '21:30:47', 2, 1, 'student'),
+(64, 'olá', '2020-11-20', '21:32:40', 2, 1, 'student'),
+(65, 'olá', '2020-11-20', '21:32:41', 2, 1, 'student'),
+(66, 'olá', '2020-11-20', '21:32:42', 2, 1, 'student'),
+(67, 'olá', '2020-11-20', '21:32:43', 2, 1, 'student'),
+(68, 'meu deus que atraso', '2020-11-20', '21:32:50', 2, 1, 'student'),
+(69, 'olá', '2020-11-20', '21:34:34', 2, 1, 'student'),
+(70, 'tudo bem?', '2020-11-20', '21:34:39', 2, 1, 'student'),
+(71, 'olá tudo bem?', '2020-11-20', '21:34:57', 2, 1, 'student'),
+(72, 'olá tudo bem?', '2020-11-20', '21:35:00', 2, 1, 'student'),
+(73, 'oiiiiiiiiiiiiii', '2020-11-20', '21:35:05', 2, 1, 'student'),
+(74, 'oiiiiiiiiiiiiii', '2020-11-20', '21:35:08', 2, 1, 'student'),
+(94, 'olá!', '2020-11-20', '22:09:29', 2, 1, 'student'),
+(95, 'tudo bem?', '2020-11-20', '22:09:35', 2, 1, 'student'),
+(96, 'oi moço?', '2020-11-20', '22:09:43', 2, 1, 'student'),
+(99, 'oi professora!', '2020-11-20', '22:13:03', 2, 3, 'student'),
+(100, 'Oi junior!', '2020-11-20', '22:13:16', 2, 8, 'student'),
+(106, 'hello', '2020-11-20', '22:29:13', 2, 1, 'student'),
+(107, 'oi', '2020-11-20', '22:45:52', 2, 3, 'student'),
+(108, '??????', '2020-11-20', '22:46:12', 2, 1, 'student'),
+(109, 'aaaa', '2020-11-20', '22:54:48', 2, 1, 'student'),
+(110, 'olá', '2020-11-20', '22:55:02', 2, 1, 'student'),
+(111, 'como vai indo a vida?', '2020-11-20', '22:55:34', 2, 8, 'student'),
+(112, 'olá!', '2020-11-20', '23:00:17', 2, 8, 'student'),
+(113, 'hey', '2020-11-20', '23:00:24', 2, 3, 'student'),
+(114, 'kkkkk', '2020-11-20', '23:00:32', 2, 8, 'student'),
+(115, 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos, qui ratione voluptatem sequi nesciunt, neque porro quisquam est, qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit, qui in ea voluptate velit esse, quam nihil molestiae consequatur, vel illum, qui dolorem eum fugiat, quo voluptas nulla pariatur? [33] At vero eos et accusamus et iusto odio dignissimos ducimus, qui blanditiis praesentium voluptatum deleniti atque corrupti, quos dolores et quas molestias excepturi sint, obcaecati cupiditate non provident, similique sunt in culpa, qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio, cumque nihil impedit, quo minus id, quod maxime placeat, facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet, ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.', '2020-11-20', '23:01:38', 2, 1, 'student'),
+(116, 'desculpa kkk', '2020-11-20', '23:10:57', 2, 1, 'student'),
+(117, 'foi mal', '2020-11-20', '23:11:52', 2, 1, 'student'),
+(118, '....', '2020-11-20', '23:17:38', 2, 1, 'student'),
+(119, 'aaa', '2020-11-20', '23:41:14', 2, 1, 'student'),
+(120, 'oi professora como você vai?', '2020-11-20', '23:42:15', 1, 3, 'student'),
+(121, 'oi george!', '2020-11-22', '20:39:43', 2, 1, 'student'),
+(122, 'como vai!', '2020-11-22', '20:39:58', 2, 1, 'student'),
+(123, 'hello!', '2020-11-22', '20:40:58', 2, 3, 'student'),
+(124, 'me responde por favor!', '2020-11-22', '20:41:29', 2, 1, 'student'),
+(125, 'me responda agora george!!!!', '2020-11-22', '20:52:42', 2, 1, 'student'),
+(126, 'que foi?', '2020-11-22', '21:00:23', 2, 1, 'helper'),
+(127, 'oi', '2020-11-22', '21:02:43', 2, 1, 'student'),
+(129, 'meu deus para', '2020-11-22', '21:03:47', 2, 1, 'helper'),
+(130, 'O que que você quer que eu te ajude?', '2020-11-22', '21:06:16', 2, 1, 'helper'),
+(131, 'Em programação, george!', '2020-11-22', '21:12:27', 2, 1, 'student'),
+(132, 'Mas exatamente o que?', '2020-11-22', '21:12:40', 2, 1, 'helper'),
+(133, 'Laço de repitição ', '2020-11-22', '21:12:56', 2, 1, 'student'),
+(134, 'e também vetor!', '2020-11-22', '21:13:03', 2, 1, 'student'),
+(135, 'entendi', '2020-11-22', '21:13:12', 2, 1, 'helper'),
+(136, 'p', '2020-11-22', '21:13:33', 2, 1, 'student'),
+(137, 'ops', '2020-11-22', '21:15:14', 2, 1, 'student'),
+(138, 'hh', '2020-11-22', '21:15:54', 2, 1, 'helper'),
+(139, 'aaaaa', '2020-11-22', '21:16:00', 2, 1, 'helper'),
+(140, '444', '2020-11-22', '21:16:08', 2, 1, 'student'),
+(141, 'aaa', '2020-11-22', '21:17:26', 2, 1, 'helper'),
+(143, '444', '2020-11-22', '21:18:06', 2, 1, 'student'),
+(144, '444', '2020-11-22', '21:18:12', 2, 1, 'helper'),
+(145, 'aaa', '2020-11-22', '21:20:14', 2, 1, 'helper'),
+(146, 'aaaa', '2020-11-22', '21:20:26', 2, 1, 'helper'),
+(147, 'aaaa', '2020-11-22', '21:21:34', 2, 1, 'helper'),
+(148, 'aaa', '2020-11-22', '21:21:55', 2, 1, 'helper'),
+(149, 'aaa', '2020-11-22', '21:21:56', 2, 1, 'student'),
+(150, 'aaa', '2020-11-22', '21:21:56', 2, 8, 'student'),
+(151, '555', '2020-11-22', '21:21:57', 2, 3, 'student'),
+(152, 'aaa', '2020-11-22', '21:23:03', 2, 1, 'helper'),
+(153, 'aa', '2020-11-22', '21:23:07', 2, 1, 'student'),
+(154, 'aaaa', '2020-11-22', '21:27:40', 2, 1, 'helper'),
+(155, '1111', '2020-11-22', '21:27:46', 2, 1, 'student'),
+(156, '444', '2020-11-22', '21:27:57', 2, 8, 'student'),
+(157, '444', '2020-11-22', '21:30:48', 2, 8, 'student'),
+(158, '222', '2020-11-22', '21:30:48', 2, 1, 'student'),
+(159, 'aaa', '2020-11-22', '21:30:48', 2, 8, 'student'),
+(160, 'aa', '2020-11-22', '21:32:15', 2, 3, 'student'),
+(161, 'oi tudo bom ', '2020-11-22', '21:34:06', 2, 1, 'helper'),
+(162, 'aaa', '2020-11-22', '21:34:07', 2, 3, 'student'),
+(163, 'aaaa', '2020-11-22', '21:34:17', 2, 1, 'helper'),
+(164, 'aaa', '2020-11-22', '21:34:21', 2, 1, 'helper'),
+(165, 'como vai!!!!', '2020-11-22', '21:34:29', 2, 1, 'helper'),
+(166, 'aaaaa', '2020-11-22', '21:34:47', 2, 3, 'student'),
+(167, 'aaa', '2020-11-22', '21:37:40', 2, 8, 'student'),
+(168, 'aaa', '2020-11-22', '21:37:41', 2, 1, 'helper'),
+(169, 'aaa', '2020-11-22', '21:37:41', 2, 8, 'student'),
+(170, 'aaaa', '2020-11-22', '21:37:42', 2, 1, 'student'),
+(171, 'aaaaa', '2020-11-22', '21:38:12', 2, 1, 'helper'),
+(172, 'oi', '2020-11-22', '21:38:32', 2, 1, 'student'),
+(173, 'que foi!', '2020-11-22', '21:39:48', 2, 3, 'helper'),
+(174, 'aline!', '2020-11-22', '21:39:48', 2, 3, 'student'),
+(175, 'diga ', '2020-11-22', '21:40:53', 1, 3, 'helper'),
+(176, 'aa', '2020-11-22', '21:42:02', 4, 3, 'helper'),
+(177, 'ççç', '2020-11-22', '21:44:06', 2, 8, 'student'),
+(178, 'aaa', '2020-11-22', '21:44:24', 1, 3, 'helper'),
+(179, 'aaa', '2020-11-22', '21:49:35', 1, 3, 'helper'),
+(180, 'oi', '2020-11-22', '21:50:37', 1, 3, 'helper'),
+(181, 'jnnakl', '2020-11-22', '21:50:37', 1, 3, 'helper'),
+(182, 'aa', '2020-11-22', '21:52:42', 1, 3, 'helper'),
+(183, 'oi', '2020-11-22', '21:53:30', 2, 3, 'helper'),
+(184, 'aaa', '2020-11-22', '21:54:23', 2, 3, 'helper'),
+(185, 'aaa', '2020-11-22', '21:55:08', 2, 3, 'helper'),
+(186, 'meu deus', '2020-11-22', '21:55:15', 2, 3, 'helper'),
+(187, 'testando', '2020-11-22', '21:56:13', 2, 3, 'helper'),
+(188, 'oi', '2020-11-22', '21:56:47', 2, 3, 'helper'),
+(189, 'agora foi!', '2020-11-22', '21:56:53', 2, 3, 'helper'),
+(190, 'testando chat', '2020-11-22', '21:57:18', 2, 3, 'student'),
+(191, 'testando chat', '2020-11-22', '21:57:27', 2, 1, 'student'),
+(192, 'testando chat junior', '2020-11-22', '21:57:40', 2, 8, 'student'),
+(193, 'testando chat ', '2020-11-22', '21:57:48', 4, 3, 'helper'),
+(194, 'aaa', '2020-11-22', '21:58:18', 4, 3, 'helper'),
+(195, 'aaa', '2020-11-22', '21:58:22', 1, 3, 'helper'),
+(196, 'oi', '2020-11-22', '21:59:53', 1, 3, 'helper'),
+(197, 'oi', '2020-11-22', '21:59:58', 2, 3, 'helper'),
+(198, 'oi', '2020-11-22', '22:00:07', 2, 3, 'student'),
+(199, 'testando!', '2020-11-22', '22:00:16', 4, 3, 'helper'),
+(200, 'ala o chat da twitch', '2020-11-22', '22:00:30', 2, 1, 'student'),
+(201, '123', '2020-11-24', '20:44:04', 2, 1, 'student'),
+(202, 'desculpa', '2020-11-24', '21:15:10', 2, 8, 'student'),
+(203, 'Hello!', '2020-11-24', '21:40:52', 2, 1, 'student'),
+(204, 'Hello, baby!', '2020-11-24', '21:42:52', 2, 1, 'helper'),
+(205, 'testando!', '2020-11-24', '23:09:59', 2, 1, 'helper'),
+(206, 'Oi vitor!', '2020-11-24', '23:41:11', 1, 1, 'helper'),
+(207, 'como vai meu consagrado!', '2020-11-24', '23:41:37', 1, 1, 'helper'),
+(208, 'pera ai que eu já aceito', '2020-11-24', '23:41:52', 2, 1, 'helper'),
+(209, 'blz?', '2020-11-24', '23:42:15', 2, 1, 'helper'),
+(210, 'Fala, mateus! tranquilo?', '2020-11-24', '23:56:25', 1, 11, 'student'),
+(211, 'podes me ajudar se possivel?', '2020-11-24', '23:56:34', 1, 11, 'student'),
+(212, 'test', '2020-11-24', '23:57:31', 1, 11, 'student'),
+(213, 'olá', '2020-11-24', '23:57:42', 1, 8, 'student'),
+(214, 'manja de jupyter?', '2020-11-24', '23:57:51', 1, 8, 'student'),
+(215, 'python hehe', '2020-11-24', '23:57:59', 1, 8, 'student'),
+(216, 'olá professora!', '2020-11-24', '23:58:13', 1, 3, 'student');
 
 -- --------------------------------------------------------
 
@@ -557,7 +706,10 @@ INSERT INTO `tbView` (`cod_view`, `data_hora_view`, `cod_video`) VALUES
 (22, '2020-11-18 23:41:32', 25),
 (23, '2020-11-18 23:44:05', 24),
 (24, '2020-11-18 23:44:51', 14),
-(25, '2020-11-18 23:45:44', 24);
+(25, '2020-11-18 23:45:44', 24),
+(26, '2020-11-19 18:17:18', 25),
+(27, '2020-11-19 23:43:22', 25),
+(28, '2020-11-20 11:04:26', 14);
 
 -- --------------------------------------------------------
 
@@ -582,6 +734,7 @@ CREATE TABLE `vwAjuda` (
 ,`helper_name` varchar(12)
 ,`helper_surname` varchar(12)
 ,`status` varchar(10)
+,`status_code` int(11)
 );
 
 -- --------------------------------------------------------
@@ -679,7 +832,7 @@ CREATE TABLE `vwVideos` (
 --
 DROP TABLE IF EXISTS `vwAjuda`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwAjuda`  AS SELECT `tbAjuda`.`cod_ajuda` AS `help_code`, `tbAjuda`.`titulo_ajuda` AS `title`, `tbAjuda`.`descricao_ajuda` AS `description`, `tbAjuda`.`classificacao_ajuda` AS `classification`, `tbAjuda`.`data_ajuda` AS `date`, `tbAjuda`.`horario_ajuda` AS `time`, `tbLocal`.`nome_local` AS `local`, `tbMateria`.`cod_materia` AS `subject_code`, `tbMateria`.`nome_materia` AS `subject_name`, `tbEstudante`.`cod_estudante` AS `student_code`, `tbEstudante`.`nome_estudante` AS `student_name`, `tbEstudante`.`sobrenome_estudante` AS `student_surname`, `tbHelper`.`cod_helper` AS `helper_code`, `tbHelper`.`nome_helper` AS `helper_name`, `tbHelper`.`sobrenome_helper` AS `helper_surname`, `tbStatus`.`nome_status` AS `status` FROM (((((`tbAjuda` join `tbLocal` on(`tbLocal`.`cod_local` = `tbAjuda`.`cod_local`)) join `tbHelper` on(`tbHelper`.`cod_helper` = `tbAjuda`.`cod_helper`)) join `tbEstudante` on(`tbEstudante`.`cod_estudante` = `tbAjuda`.`cod_estudante`)) join `tbMateria` on(`tbMateria`.`cod_materia` = `tbAjuda`.`cod_materia`)) join `tbStatus` on(`tbStatus`.`cod_status` = `tbAjuda`.`cod_status`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vwAjuda`  AS SELECT `tbAjuda`.`cod_ajuda` AS `help_code`, `tbAjuda`.`titulo_ajuda` AS `title`, `tbAjuda`.`descricao_ajuda` AS `description`, `tbAjuda`.`classificacao_ajuda` AS `classification`, `tbAjuda`.`data_ajuda` AS `date`, `tbAjuda`.`horario_ajuda` AS `time`, `tbLocal`.`nome_local` AS `local`, `tbMateria`.`cod_materia` AS `subject_code`, `tbMateria`.`nome_materia` AS `subject_name`, `tbEstudante`.`cod_estudante` AS `student_code`, `tbEstudante`.`nome_estudante` AS `student_name`, `tbEstudante`.`sobrenome_estudante` AS `student_surname`, `tbHelper`.`cod_helper` AS `helper_code`, `tbHelper`.`nome_helper` AS `helper_name`, `tbHelper`.`sobrenome_helper` AS `helper_surname`, `tbStatus`.`nome_status` AS `status`, `tbStatus`.`cod_status` AS `status_code` FROM (((((`tbAjuda` join `tbLocal` on(`tbLocal`.`cod_local` = `tbAjuda`.`cod_local`)) join `tbHelper` on(`tbHelper`.`cod_helper` = `tbAjuda`.`cod_helper`)) join `tbEstudante` on(`tbEstudante`.`cod_estudante` = `tbAjuda`.`cod_estudante`)) join `tbMateria` on(`tbMateria`.`cod_materia` = `tbAjuda`.`cod_materia`)) join `tbStatus` on(`tbStatus`.`cod_status` = `tbAjuda`.`cod_status`)) ;
 
 -- --------------------------------------------------------
 
@@ -855,13 +1008,13 @@ ALTER TABLE `tbMateria`
 -- AUTO_INCREMENT de tabela `tbMateriaHelper`
 --
 ALTER TABLE `tbMateriaHelper`
-  MODIFY `cod_materia_helper` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `cod_materia_helper` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de tabela `tbMensagem`
 --
 ALTER TABLE `tbMensagem`
-  MODIFY `cod_mensagem` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `cod_mensagem` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=217;
 
 --
 -- AUTO_INCREMENT de tabela `tbStatus`
@@ -885,7 +1038,7 @@ ALTER TABLE `tbVideo`
 -- AUTO_INCREMENT de tabela `tbView`
 --
 ALTER TABLE `tbView`
-  MODIFY `cod_view` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `cod_view` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- Restrições para despejos de tabelas

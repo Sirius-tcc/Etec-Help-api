@@ -52,7 +52,7 @@
                 $helps= "SELECT COUNT(tbAjuda.cod_helper) as helps FROM vwHelper 
                 INNER JOIN tbAjuda
                 ON tbAjuda.cod_helper = vwHelper.code
-                WHERE vwHelper.code =" .  $row['code'] . "";
+                WHERE vwHelper.code =" .  $row['code'] . " AND tbAjuda.cod_status = 2";
                 $helps = $this->con->prepare($helps);
                 $helps->execute();
                 $row['helps'] = (int) $helps->fetch(PDO::FETCH_ASSOC)['helps'];

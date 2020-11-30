@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 25-Nov-2020 às 04:01
+-- Tempo de geração: 30-Nov-2020 às 04:07
 -- Versão do servidor: 10.4.14-MariaDB
 -- versão do PHP: 7.4.11
 
@@ -280,7 +280,30 @@ CREATE TABLE `tbAjuda` (
 
 INSERT INTO `tbAjuda` (`cod_ajuda`, `titulo_ajuda`, `descricao_ajuda`, `classificacao_ajuda`, `data_ajuda`, `horario_ajuda`, `cod_materia`, `cod_estudante`, `cod_helper`, `cod_status`, `cod_local`) VALUES
 (1, 'Por Favor, me ajude em algebra!', 'Eu não estou conseguindo entender o conceito de variável, hotz. Não entendi direito como funciona tal coisa. Esse negócio de passar para o lado e somar ou subtrair, não entendi direito. Me ajuda por favor.', 5, '2020-12-17', '15:00:00', 1, 2, 1, 2, 7),
-(4, 'Preciso de ajuda em insert', ' OI, George!! eu vi um vídeo de programação explicando sobre inserts, mas eu não entendi nada. tem como você me ajudar nessa.', NULL, '2020-12-16', '15:50:00', 2, 2, 1, 2, 4);
+(4, 'Preciso de ajuda em insert', ' OI, George!! eu vi um vídeo de programação explicando sobre inserts, mas eu não entendi nada. tem como você me ajudar nessa.', 4, '2020-12-16', '15:50:00', 2, 2, 1, 2, 4),
+(7, 'Preciso de ajuda em insert', ' OI, George!! eu vi um vídeo de programação explicando sobre inserts, mas eu não entendi nada. tem como você me ajudar nessa.', 5, '2020-12-16', '15:50:00', 2, 2, 1, 2, 4),
+(8, 'aaaaaaaaa', 'aaaaaaaaaaaaaaaaaaaaaaaa', NULL, '2020-11-28', '16:00:00', 2, 2, 8, 3, 7),
+(9, 'aaaaaa', 'aaaaaa', 5, '2554-02-03', '04:04:00', 2, 2, 8, 2, 6),
+(10, 'DFODEKDGPK', 'L,SÇ,Ç,SLÇ,Ç,L~,LL', NULL, '5222-05-24', '20:04:00', 2, 2, 8, 3, 6),
+(11, 'Testando ajuda ', 'ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ccc ', NULL, '4550-05-01', '02:05:00', 2, 2, 8, 3, 5),
+(13, 'a', 'a', NULL, '2222-02-12', '23:03:00', 2, 2, 8, 3, 7),
+(17, 'aasdfd', 'aasdas', 5, '1212-02-12', '21:21:00', 2, 2, 1, 2, 7),
+(19, 'adas', 'asdassda', NULL, '4434-03-31', '03:34:00', 2, 2, 8, 3, 7),
+(20, 'aaaa', '', NULL, '0002-02-22', '02:02:00', 2, 2, 8, 3, 6),
+(21, 'aaaa', 'aaaa', 5, '0461-12-04', '15:06:00', 2, 2, 8, 2, 4),
+(22, 'Me ajudar em banco de dados!', 'Tem como a senhora me ajudar em banco de dados por favor? o tema é \"Views\", eu queria que a senhora só me explicasse o conceito!', NULL, '2020-11-30', '13:20:00', 2, 2, 3, 1, 4),
+(23, 'Me ajuda em programação com C++', 'Preciso fazer um programa no arduino com C++, porém não sei como fazer, tem como dá uma explicada bem básica, por favor!', 4, '2020-11-30', '13:20:00', 2, 2, 8, 2, 6),
+(24, 'aaaaaaaaaa', 'aaaaaa', 5, '2020-01-02', '15:20:00', 2, 2, 8, 2, 7),
+(25, 'mkkvnv mkmdvm mdv kmk lvklvlvvlk', 'sdvnjonvk mkm mmkm kdn nn sbjn nnjn jnkm lmlfnnlnnjklfv   mm mm nn j nfjnn l nfjlklnklnlblknb n ndflmmfklsmpç mklsmkmamk nmfkm kmmn n mkm kmkmkmpçkjmpçmkpmpçmç km mçmompmpçmçp sdsv', 5, '2020-01-03', '15:20:00', 2, 2, 8, 2, 7),
+(26, 'ç,lhdf,klmdfkmk', 'lfsdmklçmkldfln ', 5, '2020-01-03', '03:21:00', 2, 2, 8, 2, 7),
+(27, 'o-jisdgijipdgjm', 'vsdmkmskmdkbm', 5, '2020-02-03', '03:01:00', 2, 2, 8, 2, 6),
+(28, 'kms kmkmkmmq', 'KLDVM SKSMDMVKSMKM d,lsmkpvmkmvskmmavm vkmkm KLDVM SKSMDMVKSMKM d,lsmkpvmkmvskmmavm vkmkm KLDVM SKSMD vsvavm vkmkm KLDVM SKSMDMVKSMKM d,lsmkpvmkmvskmmavm vkmkm vddvadvv jklsbj njnnjbn n n  kmk mkmk  kmk mkm p mpçm km m çm km', 5, '2020-02-03', '15:20:00', 2, 2, 8, 2, 3),
+(29, 'sdvjjkvjdjm', 'mlsmmvsdkmmlsmmvsdkmvabvhib[\n\nsvndjvj[\nvsdl mkmsvdmvp bsdfkkpçmsdblk\nlbk,pbpdkpbp ,lpmgikkpsmbd ok,o kok,gjdpbn nhgngh', NULL, '2020-04-03', '02:59:00', 2, 2, 8, 3, 7),
+(30, 'dfhlmfklmk', 'b ,m dkmkmdkçmnkmfkmnkkm km b dm,nmfmkmnkdmkçgnmnmf\nklblmmldb\n\nbdfmçmbldçl\n\n,vl ', 5, '2020-12-03', '15:20:00', 2, 2, 8, 2, 7),
+(31, 'ME ajuda em IF ELSE em PYTHON, PLEASE!', 'estou com muita DIFICULDADE em IF ELSE em PYTHON, por favor me explique esse mostro de 7 cabeças', 5, '2020-12-03', '15:20:00', 2, 2, 8, 2, 7),
+(32, 'Me ajuda em bootstrap', 'Teria como você me ajudar com bootstrap? não faço a menor ideia de como funciona, se acredita?\n', NULL, '2020-12-03', '16:20:00', 2, 2, 11, 3, 7),
+(33, 'ME ajuda em IF ELSE em PYTHON, PLEASE!', 'A LSM,VKLM j vjnv jnjn  mvmA LSM,VKLM j vjn;ac.v jnjn  mvmA LSM,VKLM j vjnv jnjn  mvmA LSM,VKLM j vjnv jnjn  mvmA LSM,VKLM j vjcs nv jnjn  mvmA LSM,VKLM j vjnv jnjn  mvmA LSM,VKLM j vjnv jnjn  mvmajiac i mpm pmmpkmkmm  mk mpmp', NULL, '2020-12-03', '12:30:00', 2, 2, 11, 1, 7),
+(34, 'me ajuda em bootstrap ai por favor!', '', NULL, '2020-12-03', '12:30:00', 2, 1, 11, 1, 7);
 
 -- --------------------------------------------------------
 
@@ -337,7 +360,7 @@ INSERT INTO `tbHelper` (`cod_helper`, `foto_helper`, `nome_helper`, `sobrenome_h
 (3, '3.png', 'Aline', 'Mendonça', 'Eu sou professora da Etec de guaianazes em Desenvolvimento de Sistemas. Caso tenha dúvida em programação só chamar', 'aline@gmail.com', '7751a23fa55170a57e90374df13a3ab78efe0e99'),
 (8, '8.png', 'Antonio', 'Junior', 'Olá eu sou o professor junior!\n\nEu gosto bastante de robótica, astrofísica, programação e qualquer coisa que envolve tecnologia e ciência.\n\nSe precisar de ajuda é só me chamar (uma ajuda que envolva programação)', 'antoniojr@gmail.com', '925f631c4ece772dceaee694ceb09e43bf07e5c9'),
 (9, '9.png', 'Vanessa', 'Souza', 'Sou a professora, vanessa!\nE sou capacitada para ensinar matemática básica e do ensino fundamental com propriedade.\n\ncaso precisar de ajuda, só entrar em contato.', 'vanessa@gmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220'),
-(11, NULL, 'Mateus', 'Araujo', 'Manjo muito de programação e lógica. \nJá alteirei um css de um framework inteiro na mão só por diversão, se quiser aprender lógica só entrar em contato', 'mateusAraujo@gmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220'),
+(11, '11.png', 'Mateus', 'Araujo', 'Manjo muito de programação e lógica. \nJá alteirei um css de um framework inteiro na mão só por diversão, se quiser aprender lógica só entrar em contato', 'mateusAraujo@gmail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220'),
 (12, '12.png', 'Clodoaldo', 'Silva', 'Olá eu sou o clodoaldo. Gosto bastante de redes,  banco de dados e robótica.\n\nSe precisar de ajuda em álgebra, geometria e funções e matemática em geral só me chamar!', 'clodo@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef');
 
 -- --------------------------------------------------------
@@ -602,7 +625,70 @@ INSERT INTO `tbMensagem` (`cod_mensagem`, `texto_mensagem`, `data_mensagem`, `ho
 (213, 'olá', '2020-11-24', '23:57:42', 1, 8, 'student'),
 (214, 'manja de jupyter?', '2020-11-24', '23:57:51', 1, 8, 'student'),
 (215, 'python hehe', '2020-11-24', '23:57:59', 1, 8, 'student'),
-(216, 'olá professora!', '2020-11-24', '23:58:13', 1, 3, 'student');
+(216, 'olá professora!', '2020-11-24', '23:58:13', 1, 3, 'student'),
+(217, 'diga brother!', '2020-11-25', '21:12:54', 1, 1, 'student'),
+(218, 'Oi clodo, como vai!', '2020-11-25', '21:15:09', 2, 12, 'student'),
+(219, 'teste denovo', '2020-11-27', '23:47:09', 2, 8, 'student'),
+(220, 'olha o tanto que vc é requisitado', '2020-11-28', '00:27:24', 2, 8, 'student'),
+(221, 'kkkkk', '2020-11-28', '00:27:26', 2, 8, 'student'),
+(222, 'vish', '2020-11-28', '01:54:05', 2, 3, 'student'),
+(223, 'olá', '2020-11-28', '14:53:48', 2, 3, 'student'),
+(224, 'aaa', '2020-11-28', '15:01:59', 2, 8, 'student'),
+(225, 'mandei um pedido de ajuda', '2020-11-28', '15:04:06', 2, 3, 'student'),
+(226, 'vc viu?', '2020-11-28', '15:04:16', 2, 3, 'student'),
+(227, 'desculpa o chat buga as vezes', '2020-11-28', '15:04:32', 2, 8, 'student'),
+(228, 'i', '2020-11-28', '15:10:48', 2, 8, 'student'),
+(229, ',dfkl', '2020-11-28', '15:42:47', 2, 8, 'student'),
+(230, 'oi', '2020-11-29', '14:16:18', 2, 8, 'student'),
+(231, 'testando', '2020-11-29', '14:47:22', 2, 8, 'student'),
+(232, 'muito obrigado pela ajuda junior!', '2020-11-29', '14:47:37', 2, 8, 'student'),
+(233, 'de nada', '2020-11-29', '15:21:16', 2, 8, 'helper'),
+(234, 'é nóis', '2020-11-29', '16:21:22', 2, 8, 'student'),
+(235, 'kkk', '2020-11-29', '16:21:36', 2, 8, 'student'),
+(236, 'kkk', '2020-11-29', '17:36:01', 2, 8, 'student'),
+(237, 'hdgjo', '2020-11-29', '17:53:19', 2, 8, 'helper'),
+(238, 'mnvjdls', '2020-11-29', '17:53:23', 2, 8, 'student'),
+(239, 'teste', '2020-11-29', '18:21:59', 2, 8, 'student'),
+(240, ',dl,lb,d,b', '2020-11-29', '18:32:37', 2, 8, 'student'),
+(241, 'oi', '2020-11-29', '18:43:22', 2, 8, 'student'),
+(242, 'tudo bom?', '2020-11-29', '18:43:22', 2, 8, 'student'),
+(243, 'okgsk', '2020-11-29', '18:43:57', 2, 8, 'student'),
+(244, 'asjisklc', '2020-11-29', '18:45:22', 2, 8, 'student'),
+(245, 'ipjkajis', '2020-11-29', '18:45:25', 2, 8, 'student'),
+(246, 'kscakcimoas', '2020-11-29', '18:45:38', 2, 8, 'student'),
+(247, 'ghaygyfd', '2020-11-29', '18:45:41', 2, 8, 'student'),
+(248, 'huhjhv', '2020-11-29', '18:45:43', 2, 8, 'student'),
+(249, 'teste', '2020-11-29', '18:45:46', 2, 8, 'student'),
+(250, 'testando', '2020-11-29', '18:45:48', 2, 8, 'student'),
+(251, 'oi', '2020-11-29', '18:48:14', 2, 8, 'student'),
+(252, 'oi', '2020-11-29', '18:48:17', 2, 8, 'helper'),
+(253, 'oi', '2020-11-29', '18:48:20', 2, 8, 'helper'),
+(254, 'oi', '2020-11-29', '18:48:21', 2, 8, 'helper'),
+(255, 'kkkkkkkkkkkkkkkkkkkkkkk', '2020-11-29', '18:48:30', 2, 8, 'helper'),
+(256, 'kkkkkk', '2020-11-29', '18:48:31', 2, 8, 'helper'),
+(257, 'kkkk', '2020-11-29', '18:48:35', 2, 8, 'helper'),
+(258, 'oi', '2020-11-29', '19:01:10', 2, 8, 'student'),
+(259, 'oi', '2020-11-29', '19:01:19', 2, 8, 'helper'),
+(260, 'huhuojhn', '2020-11-29', '19:01:26', 2, 8, 'student'),
+(261, 'iiojijijjlonkj', '2020-11-29', '19:01:30', 2, 8, 'helper'),
+(262, 'oi', '2020-11-29', '19:01:43', 2, 8, 'student'),
+(263, 'oi', '2020-11-29', '19:01:50', 2, 8, 'helper'),
+(264, 'hello mateus!', '2020-11-29', '19:24:27', 2, 11, 'student'),
+(265, 'coloca ua foto aí pô kkkhkhkhkhkkhkhkjk', '2020-11-29', '19:24:37', 2, 11, 'student'),
+(266, 'ok kkkk', '2020-11-29', '20:12:07', 2, 11, 'student'),
+(267, 'ajuda aí mateus corno', '2020-11-29', '20:37:35', 2, 11, 'student'),
+(268, 'eai vitor kkkkk tú é mó corno', '2020-11-29', '20:38:40', 1, 11, 'helper'),
+(269, 'kkkkkkkkkkkkkkkkk', '2020-11-29', '20:42:04', 1, 11, 'helper'),
+(270, 'oi', '2020-11-29', '20:44:54', 2, 11, 'student'),
+(271, 'smkgslçç', '2020-11-29', '20:45:31', 2, 11, 'helper'),
+(272, 'oi', '2020-11-29', '20:45:52', 2, 11, 'helper'),
+(273, 'po', '2020-11-29', '20:49:41', 2, 8, 'student'),
+(274, 'hh', '2020-11-29', '21:16:18', 2, 8, 'student'),
+(275, 'mas do nada o chat parou', '2020-11-29', '21:16:32', 2, 11, 'student'),
+(276, 'mas mandei um pedido aí ', '2020-11-29', '21:17:49', 2, 11, 'student'),
+(277, 'só confirmar', '2020-11-29', '21:17:53', 2, 11, 'student'),
+(278, 'kkkkkkkkkkk', '2020-11-29', '22:36:44', 1, 11, 'student'),
+(279, 'você é minha inspiração, cara', '2020-11-29', '22:54:32', 1, 1, 'student');
 
 -- --------------------------------------------------------
 
@@ -709,7 +795,10 @@ INSERT INTO `tbView` (`cod_view`, `data_hora_view`, `cod_video`) VALUES
 (25, '2020-11-18 23:45:44', 24),
 (26, '2020-11-19 18:17:18', 25),
 (27, '2020-11-19 23:43:22', 25),
-(28, '2020-11-20 11:04:26', 14);
+(28, '2020-11-20 11:04:26', 14),
+(29, '2020-11-28 15:42:32', 25),
+(30, '2020-11-29 14:46:21', 25),
+(31, '2020-11-29 22:48:54', 25);
 
 -- --------------------------------------------------------
 
@@ -978,7 +1067,7 @@ ALTER TABLE `tbView`
 -- AUTO_INCREMENT de tabela `tbAjuda`
 --
 ALTER TABLE `tbAjuda`
-  MODIFY `cod_ajuda` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `cod_ajuda` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT de tabela `tbEstudante`
@@ -1014,7 +1103,7 @@ ALTER TABLE `tbMateriaHelper`
 -- AUTO_INCREMENT de tabela `tbMensagem`
 --
 ALTER TABLE `tbMensagem`
-  MODIFY `cod_mensagem` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=217;
+  MODIFY `cod_mensagem` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=280;
 
 --
 -- AUTO_INCREMENT de tabela `tbStatus`
@@ -1038,7 +1127,7 @@ ALTER TABLE `tbVideo`
 -- AUTO_INCREMENT de tabela `tbView`
 --
 ALTER TABLE `tbView`
-  MODIFY `cod_view` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `cod_view` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- Restrições para despejos de tabelas

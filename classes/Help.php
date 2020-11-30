@@ -169,4 +169,22 @@
                 throw new Exception('No json found');
             }
         }
+
+        public function locations(){
+            $sql = "SELECT cod_local as code, nome_local as name FROM tbLocal";
+
+            $sql = $this->con->prepare($sql);
+
+            $sql->execute();
+
+
+            $result = array();
+            while($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+                $row['code'] = (int) $row['code'];
+                $result[] = $row;
+            }
+
+            return $result;
+        }
+
     }

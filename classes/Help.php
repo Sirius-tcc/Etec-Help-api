@@ -25,31 +25,30 @@
                         WHERE helper_code = $helper_code AND 
                         student_code = $student_code
                         ORDER BY help_code DESC";
-
-                $sql = $this->con->prepare($sql);
-
-                $sql->execute();
-
-
-                $result = array();
-                while($row = $sql->fetch(PDO::FETCH_ASSOC)) {
-                    $row['help_code'] = (int) $row['help_code'];
-                    $row['helper_code'] = (int) $row['helper_code'];
-                    $row['student_code'] = (int) $row['student_code'];
-                    $row['subject_code'] = (int) $row['subject_code'];
-                    $row['classification'] = (int) $row['classification'];
-                    $row['date'] = implode('/', array_reverse(explode('-', $row['date'] )));
-                
-                    $result[] = $row;
-                }
-
-                if(!$result){ throw new Exception("Nenhuma ajuda."); }
-
-                return $result;
             }else{
-                throw new Exception("Parametros 'student_code' ou 'helper_code' estão faltando!");
+                $sql = "SELECT * FROM vwAjuda WHERE status_code = 2 ORDER BY help_code ";
             }
+
+            $sql = $this->con->prepare($sql);
+
+            $sql->execute();
+
+
+            $result = array();
+            while($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+                $row['help_code'] = (int) $row['help_code'];
+                $row['helper_code'] = (int) $row['helper_code'];
+                $row['student_code'] = (int) $row['student_code'];
+                $row['subject_code'] = (int) $row['subject_code'];
+                $row['classification'] = (int) $row['classification'];
+                $row['date'] = implode('/', array_reverse(explode('-', $row['date'] )));
             
+                $result[] = $row;
+            }
+
+            if(!$result){ throw new Exception("Nenhuma ajuda."); }
+
+            return $result;
         }
 
 

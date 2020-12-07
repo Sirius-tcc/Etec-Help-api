@@ -13,6 +13,7 @@
     require_once 'classes/Topic.php';
     require_once 'classes/Help.php';
     require_once 'classes/Chat.php';
+    require_once 'classes/Adm.php';
     require_once 'classes/custom/ConstVariable.php';
 
     class Rest {

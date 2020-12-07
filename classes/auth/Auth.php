@@ -5,7 +5,7 @@
         private $key =  '40028922-3t3c-h3lp-4pl1c4t10n-k3y-40028922';
 
 
-        public function createToken($id, $name, $surname, $email, $img, $type ) 
+        public function createToken($id, $type ) 
         {
             
              //Header Token
@@ -17,10 +17,6 @@
              //Payload - Content
              $payload = [
                  'id' => $id,
-                 'name' => $name,
-                 'surname' => $surname,
-                 'email' => $email,
-                 'img' => $img,
                  'type' => $type,
              ];
 

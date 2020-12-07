@@ -28,6 +28,13 @@
             while($row = $sql->fetch(PDO::FETCH_ASSOC)){
                 $row['code'] = (int) $row['code'];
                 $row['photo'] = $row['photo'] === null ? $row['photo'] : $this->IMAGE_PATH_HTTP.$row['photo'];
+
+                $askedHelps = "SELECT COUNT(student_code) as asked_help FROM vwAjuda WHERE student_code = ".  $row['code'] . "";
+                $askedHelps = $this->con->prepare($askedHelps);
+                $askedHelps->execute();
+    
+                $row['asked_help'] = (int) $askedHelps->fetch(PDO::FETCH_ASSOC)['asked_help'];
+
                 $result[] = $row;
             }
 
@@ -193,11 +200,7 @@
                     $email = $array_data['email'];
                     $password = sha1($array_data['password']);
                     try{
-                        $sql = "SELECT cod_estudante AS code, 
-                                nome_estudante AS name, 
-                                sobrenome_estudante AS surname,
-                                email_estudante AS email,
-                                foto_estudante AS photo
+                        $sql = "SELECT cod_estudante AS code
                                 FROM tbEstudante WHERE senha_estudante = '$password' AND email_estudante = '$email'";
 
                         $sql = $this->con->prepare($sql);
@@ -211,16 +214,12 @@
                         $user['code'] = (int) $user['code'];
                         
                         $id = $user['code'];
-                        $name = $user['name'];
-                        $surname = $user['surname'];
-                        $email = $user['email'];
-                        $img = $user['photo'] === null ? $user['photo'] : $this->IMAGE_PATH_HTTP.$user['photo'];
                         $type = "student";
                         
                         $auth = new Auth();
 
 
-                        return $auth->createToken( $id, $name, $surname, $email, $img, $type);
+                        return $auth->createToken( $id, $type);
 
                     }catch(Exception $e){ 
                         throw new Exception( $e->getMessage());

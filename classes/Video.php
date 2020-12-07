@@ -20,8 +20,12 @@
 
         public function list($topic)
         {
-            $sql = "SELECT * FROM vwVideos WHERE topic = '$topic'";
-
+            if(strlen($topic) == 0){
+                $sql = "SELECT * FROM vwVideos";
+            }else {
+                $sql = "SELECT * FROM vwVideos WHERE topic = '$topic' or topic_code = ". (int) $topic ."";
+            }
+            
             $sql = $this->con->prepare($sql);
 
             $sql->execute();
@@ -123,10 +127,9 @@
                 if($data != null){ 
 
                     $title = $data['title'];
-                    $description = $data['description'];
 
                     try {
-                        $sql = "CALL sp_update_video($id, '$title', '$description')";
+                        $sql = "CALL sp_update_video($id, '$title')";
 
                         $sql = $this->con->prepare($sql);
 
@@ -185,6 +188,28 @@
 
                 throw new Exception('Erro ao deletar usuário. Erro: ' . $e->getMessage());
             }
+        }
+
+        public function topic($subject)
+        {
+            $sql = "SELECT cod_topico as code ,nome_topico as name  FROM tbTopico WHERE cod_materia = '$subject'";
+
+            $sql = $this->con->prepare($sql);
+
+            $sql->execute();
+
+
+            $result = array();
+            while($row = $sql->fetch(PDO::FETCH_ASSOC)){
+                
+                $result[] = $row;
+            }
+
+            if(!$result){
+                throw new Exception("Nenhum video cadastrado");
+            }
+
+            return $result;
         }
 
 

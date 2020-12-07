@@ -229,7 +229,7 @@
                 if (file_exists($profile_photo)) {
                     unlink($profile_photo);
                 }
-
+                
                 $sql = "CALL sp_delete_helper($id)";
 
                 $this->con->exec($sql);
@@ -258,11 +258,7 @@
                     $email = $array_data['email'];
                     $password = sha1($array_data['password']);
                     try{
-                        $sql = "SELECT cod_helper AS code, 
-                                nome_helper AS name, 
-                                sobrenome_helper as surname,
-                                email_helper AS email,
-                                foto_helper AS photo 
+                        $sql = "SELECT cod_helper AS code
                                 FROM tbHelper WHERE senha_helper = '$password' AND email_helper = '$email'";
 
                         $sql = $this->con->prepare($sql);
@@ -275,15 +271,11 @@
                         $user['code'] = (int) $user['code'];
                         
                         $id = $user['code'];
-                        $name = $user['name'];
-                        $surname = $user['surname'];
-                        $email = $user['email'];
-                        $img = $user['photo'] === null ? $user['photo'] : $this->IMAGE_PATH_HTTP.$user['photo'];
                         $type = "helper";
                         
                         $auth = new Auth();
 
-                        return $auth->createToken( $id, $name, $surname, $email, $img, $type );
+                        return $auth->createToken( $id, $type );
 
                     }catch(Exception $e){ 
                         throw new Exception( $e->getMessage());
